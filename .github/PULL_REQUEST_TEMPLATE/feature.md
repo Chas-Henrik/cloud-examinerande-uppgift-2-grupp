@@ -6,7 +6,8 @@ Fixes # (issue number)
 ## 🔍 Type of change
 
 - [x] New feature
-- [x] New feature
+
+## ✅ Checklist
 - [ ] New and existing unit tests pass locally
 - [ ] Any dependent changes have been merged and published
 
