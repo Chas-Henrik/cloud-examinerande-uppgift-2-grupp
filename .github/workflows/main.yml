@@ -23,4 +23,8 @@ jobs:
       - run: npm run lint
 
       # 5. Kör testerna (inkl. det som failar)
-      - run: npm test
+      - name: Run tests
+        run: npm test
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL}}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY}}
