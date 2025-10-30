@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Klona repot in i GitHub Actions-runnern
+      - uses: actions/checkout@v4
+
+      # 2. Installera rätt Node-version i den här maskinen
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # 3. Installera dependencies exakt som i lockfilen
+      - run: npm ci
+
+      # 4. Kör lintern (Next.js har next lint inbyggt)
+      - run: npm run lint
+
+      # 5. Kör testerna (inkl. det som failar)
+      - run: npm test
