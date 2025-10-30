@@ -4,12 +4,8 @@ Please include a summary of the changes and the related issue.
 Fixes # (issue number)
 
 ## 🔍 Type of change
-Please delete options that are not relevant.
 
-- [ ] Hotfix
 - [ ] Bug fix
-- [ ] New feature
-- [ ] Documentation update
 
 ## ✅ Checklist
 - [ ] I have performed a self-review of my code
