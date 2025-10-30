@@ -5,7 +5,7 @@ Fixes # (issue number)
 
 ## 🔍 Type of change
 
-- [ ] Bug fix
+- [x] Bug fix
 
 ## ✅ Checklist
 - [ ] I have performed a self-review of my code
