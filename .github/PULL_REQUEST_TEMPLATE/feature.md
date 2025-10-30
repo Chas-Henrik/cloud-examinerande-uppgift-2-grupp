@@ -6,7 +6,7 @@ Fixes # (issue number)
 ## 🔍 Type of change
 Please delete options that are not relevant.
 
-- [ ] Hot fix
+- [ ] Hotfix
 - [ ] Bug fix
 - [ ] New feature
 - [ ] Documentation update
