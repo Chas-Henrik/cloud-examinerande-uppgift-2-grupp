@@ -5,13 +5,11 @@ Fixes # (issue number)
 
 ## 🔍 Type of change
 
-- [x] Hotfix
+- [x] Documentation update
 
 ## ✅ Checklist
 - [ ] I have performed a self-review of my code
 - [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] I have added tests that prove my fix is effective or that my feature works
-- [ ] New and existing unit tests pass locally
 - [ ] Any dependent changes have been merged and published
 
 ## 💡 Additional context

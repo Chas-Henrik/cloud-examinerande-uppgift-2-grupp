@@ -8,6 +8,9 @@ Fixes # (issue number)
 - [x] New feature
 
 ## ✅ Checklist
+- [ ] I have performed a self-review of my code
+- [ ] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have added tests that prove my feature works
 - [ ] New and existing unit tests pass locally
 - [ ] Any dependent changes have been merged and published
 
