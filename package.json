@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start",
     "test": "jest",
-    "lint": "eslint",
-    "postinstall": "npm rebuild lightningcss --force"
+    "lint": "eslint"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.76.1",
