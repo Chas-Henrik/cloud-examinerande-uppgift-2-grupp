@@ -1,18 +1,6 @@
-## 📝 Description
-Please include a summary of the changes and the related issue. 
+Please go to the **Preview tab** and select the appropriate **Pull Request Template**:
 
-Fixes # (issue number)
-
-## 🔍 Type of change
-
-- [x] New feature
-
-## ✅ Checklist
-- [ ] I have performed a self-review of my code
-- [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] I have added tests that prove my feature works
-- [ ] New and existing unit tests pass locally
-- [ ] Any dependent changes have been merged and published
-
-## 💡 Additional context
-Add any other context about the PR here.
+* [Feature](?expand=1&template=feature.md)
+* [Bugfix](?expand=1&template=bugfix.md)
+* [Hotfix](?expand=1&template=hotfix.md)
+* [Documentation](?expand=1&template=documentation.md)
