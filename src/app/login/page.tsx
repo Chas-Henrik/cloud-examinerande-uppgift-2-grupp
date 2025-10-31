@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { signIn } from "@/lib/supabase/auth";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -18,8 +17,20 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      await signIn({ email, password });
-      router.push("/dashboard");
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (res.ok) {
+        router.push("/dashboard");
+      } else {
+        const data = await res.json();
+        setError(data.message || "An error occurred during login");
+      }
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);

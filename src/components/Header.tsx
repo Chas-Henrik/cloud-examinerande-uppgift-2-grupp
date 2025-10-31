@@ -1,6 +1,5 @@
 'use client'
 
-import { signOut } from '@/lib/supabase/auth'
 import { useRouter } from 'next/navigation'
 
 export default function Header() {
@@ -8,10 +7,19 @@ export default function Header() {
 
   const handleSignOut = async () => {
     try {
-      await signOut()
-      router.push('/login')
+      const res = await fetch('/api/auth/logout', { method: 'POST' })
+      if (res.ok) {
+        router.push('/login')
+      } else {
+        const data = await res.json();
+        console.error(data.message || "An error occurred during signout");
+      }
     } catch (error) {
-      console.error('Error signing out:', error)
+      if (error instanceof Error) {
+        console.error(error.message || "An error occurred during signout");
+      } else {
+        console.error(String(error) || "An error occurred during signout");
+      }
     }
   }
 
