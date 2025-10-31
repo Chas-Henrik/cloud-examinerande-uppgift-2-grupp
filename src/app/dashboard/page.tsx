@@ -68,10 +68,9 @@ export default function DashboardPage() {
       <Header />
 
       <main
-        className="max-w-4xl mx-auto py-12"
-        style={{ paddingLeft: "80px", paddingRight: "80px" }}
+        className="max-w-4xl mx-auto py-12 px-[clamp(16px,5vw,80px)]"
       >
-        <div className="flex items-center justify-between mb-12">
+        <div className="flex flex-wrap items-center justify-between mb-12 gap-y-6">
           <div>
             <h2 className="text-3xl font-serif text-dark-brown mb-2">
               Your Entries
