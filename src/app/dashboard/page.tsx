@@ -6,12 +6,15 @@ import Header from "@/components/Header";
 import EntryCard from "@/components/EntryCard";
 import { Entry } from "@/types/database.types";
 import Link from "next/link";
+import EditModal from "@/components/EditModal";
 
 export default function DashboardPage() {
   const router = useRouter();
   const [entries, setEntries] = useState<Entry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingEntryId, setEditingEntryId] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadData() {
@@ -41,6 +44,18 @@ export default function DashboardPage() {
 
     loadData();
   }, [router]);
+
+  const deleteEntry = async (id : string) => {
+    // Implement delete functionality here
+  };
+
+  const editEntry = (id : string) => {
+
+    if (!isEditing) {
+      setIsEditing(true);
+      setEditingEntryId(id);
+    } 
+  };
 
   if (loading) {
     return (
@@ -99,10 +114,13 @@ export default function DashboardPage() {
         ) : (
           <div className="space-y-8">
             {entries.map((entry) => (
-              <EntryCard key={entry.id} entry={entry} />
+              <EntryCard key={entry.id} entry={entry} handleDelete={deleteEntry} handleEdit={editEntry} />
             ))}
           </div>
         )}
+        {isEditing && editingEntryId &&
+            <EditModal entry={entries.find(e => e.id === editingEntryId)} cancelEdit={() => {setIsEditing(false); setEditingEntryId(null)}}/> 
+        }
       </main>
     </div>
   );
