@@ -37,6 +37,8 @@ jobs:
     steps:
       # 1. Clone the repo into the GitHub Actions runner
       - uses: actions/checkout@v4
+        with:
+            ref: ${{ github.event.push.head.sha }}
 
       # 2. Install correct Node version in this machine
       - uses: actions/setup-node@v4
@@ -46,44 +48,20 @@ jobs:
       # 3. Install dependencies exactly as in lockfile
       - run: npm ci
 
-      # 4. Build the Next.js app
-      - name: Build Next.js app
-        run: npm run build
+      # 4. Run Lighthouse mobile audit
+      - name: lighthouse mobile audit
+        run: yarn lhci:mobile
         env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.push.head.sha }}
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL}}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY}}
 
-      # 5. Run Lighthouse Collect
-      - name: Run Lighthouse Collect
-        run: |
-          LHCI_BUILD_CONTEXT__CURRENT_HASH=github-actions \
-          npx lhci collect --config=lighthouserc.js || true
+      # 5. Run Lighthouse desktop audit
+      - name: lighthouse desktop audit
+        run: yarn lhci:desktop
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
-          LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.sha }}
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
-
-      # 6. Upload the results
-      - name: Run Lighthouse Upload
-        run: |
-          LHCI_BUILD_CONTEXT__CURRENT_HASH=github-actions \
-          npx lhci upload --config=lighthouserc.js || true
-        env:
-          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
-          LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.sha }}
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
-
-      # 7. List report files for debugging
-      - name: Show report files
-        run: ls -l .lighthouseci
-
-      # 8. Upload Lighthouse report as artifact
-      - name: Upload Lighthouse Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: lighthouse-report
-          path: |
-            .lighthouseci/*.html
-            .lighthouseci/*.json
+          LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.push.head.sha }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL}}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY}}

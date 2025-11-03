@@ -8,7 +8,8 @@
     "start": "next start",
     "test": "jest",
     "lint": "eslint",
-    "lhci": "dotenv -e .env.local -- npx lhci autorun"
+    "lhci:mobile": "npx lhci autorun",
+    "lhci:desktop": "npx lhci autorun --collect.settings.preset=desktop"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.76.1",
