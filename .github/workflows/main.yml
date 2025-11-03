@@ -1,28 +1,30 @@
+# .github/workflows/main.yml
+
 name: CI
 
 on:
-  push:
+  push:           # triggers lint-and-test on all branches
 
 jobs:
   lint-and-test:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Klona repot in i GitHub Actions-runnern
+      # 1. Clone the repo into the GitHub Actions runner
       - uses: actions/checkout@v4
 
-      # 2. Installera rätt Node-version i den här maskinen
+      # 2. Install correct Node version in this machine
       - uses: actions/setup-node@v4
         with:
           node-version: 22
 
-      # 3. Installera dependencies exakt som i lockfilen
+      # 3. Install dependencies exactly as in lockfile
       - run: npm ci
 
-      # 4. Kör lintern (Next.js har next lint inbyggt)
+      # 4. Run linter (Next.js has next lint built-in)
       - run: npm run lint
 
-      # 5. Kör testerna (inkl. det som failar)
+      # 5. Run tests (including those that fail)
       - name: Run tests
         run: npm test
         env:
