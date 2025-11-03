@@ -21,7 +21,7 @@ export default function EntryCard({ entry }: EntryCardProps) {
         </div>
         <h2 className="text-2xl font-serif text-dark-brown mb-3">{entry.title}</h2>
       </div>
-      <p className="text-dark-brown/80 leading-relaxed whitespace-pre-wrap" style={{ width: '200px' }}>
+      <p className="text-dark-brown/80 leading-relaxed whitespace-pre-wrap">
         {entry.content}
       </p>
     </div>
