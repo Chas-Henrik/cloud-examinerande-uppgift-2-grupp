@@ -16,45 +16,91 @@ export default function DashboardPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [editingEntryId, setEditingEntryId] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function loadData() {
-      try {
-        const res = await fetch("/api/entries");
-        if (!res.ok) {
-          if (res.status === 401) {
-            router.push("/login");
-            return;
-          }
-          const errorData = await res.json();
-          throw new Error(errorData.message || "Failed to load entries");
-        }
-        const { data } = await res.json();
 
-        setEntries(data);
-      } catch (err: unknown) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError(String(err) || "Failed to load entries");
+  async function loadData() {
+    try {
+      const res = await fetch("/api/entries");
+      if (!res.ok) {
+        if (res.status === 401) {
+          router.push("/login");
+          return;
         }
-      } finally {
-        setLoading(false);
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Failed to load entries");
       }
-    }
+      const { data } = await res.json();
 
+      setEntries(data);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError(String(err) || "Failed to load entries");
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
+  useEffect(() => {
     loadData();
   }, [router]);
 
   const deleteEntry = async (id : string) => {
-    // Implement delete functionality here
+    try {
+      const response = await fetch(`/api/entries/${id}`, {
+        method: 'DELETE',
+      }); 
+
+      if (!response.ok) {
+        alert('Failed to delete entry');
+        return;
+      }
+
+      alert('Entry deleted successfully');
+      loadData();
+
+    } catch (err) { 
+      if (err instanceof Error) {
+        alert(`Error: ${err.message}`);
+      } else {
+        alert('An unknown error occurred');
+      }
+    } 
   };
 
   const editEntry = (id : string) => {
-
     if (!isEditing) {
       setIsEditing(true);
       setEditingEntryId(id);
     } 
+  };
+
+  const saveEditedEntry = async (editedEntry : Entry) => {
+    try {
+      const response = await fetch(`/api/entries/${editedEntry.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ title: editedEntry.title, content: editedEntry.content }),
+      });
+
+      if (!response.ok) {
+        alert('Failed to save changes');
+        return;
+      }
+
+      alert('Entry updated successfully');  
+      setIsEditing(false);
+      setEditingEntryId(null);
+      loadData();
+    } catch (err : unknown) {
+      if (err instanceof Error) {
+        alert(`Error: ${err.message}`);
+      } else {
+        alert('An unknown error occurred');
+      }
+    }
   };
 
   if (loading) {
@@ -119,9 +165,10 @@ export default function DashboardPage() {
           </div>
         )}
         {isEditing && editingEntryId &&
-            <EditModal entry={entries.find(e => e.id === editingEntryId)} cancelEdit={() => {setIsEditing(false); setEditingEntryId(null)}}/> 
+            <EditModal entry={entries.find(e => e.id === editingEntryId)} onCancel={() => {setIsEditing(false); setEditingEntryId(null)}} onSave={saveEditedEntry}/> 
         }
       </main>
     </div>
   );
-}
+  
+};

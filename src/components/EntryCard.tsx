@@ -25,8 +25,8 @@ export default function EntryCard({ entry, handleEdit, handleDelete }: EntryCard
         <DropdownMenu>
           <DropdownMenuTrigger className="cursor-pointer text-[18px]">. . .</DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={handleEdit(entry.id)}>Edit</DropdownMenuItem>
-            <DropdownMenuItem onClick={handleDelete(entry.id)}>Delete</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleEdit(entry.id)}>Edit</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleDelete(entry.id)}>Delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
