@@ -36,7 +36,7 @@ jobs:
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY}}
   
   lighthouseci:
-    if: github.event_name == 'pull_request' # only run on PRs
+    if: github.event_name == 'push' # only run on PRs
     runs-on: ubuntu-latest
 
     steps:
