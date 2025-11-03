@@ -50,7 +50,7 @@ jobs:
 
       # 4. Run Lighthouse mobile audit
       - name: lighthouse mobile audit
-        run: yarn lhci:mobile
+        run: npm run lhci:mobile
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
           LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.push.head.sha }}
@@ -59,7 +59,7 @@ jobs:
 
       # 5. Run Lighthouse desktop audit
       - name: lighthouse desktop audit
-        run: yarn lhci:desktop
+        run: npm run lhci:desktop
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
           LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.push.head.sha }}
