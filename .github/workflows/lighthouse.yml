@@ -42,28 +42,28 @@ jobs:
 
       # 6. Run Lighthouse mobile audit
       - name: Lighthouse mobile audit
-        run: lhci autorun --collect.headers="x-vercel-protection-bypass: $VERCEL_AUTOMATION_BYPASS_SECRET"
         continue-on-error: true  # do not fail CI if LHCI fails
         env:
           LHCI_URL: "${{ env.PREVIEW_URL }}"
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
-          LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.push.head.sha }}
+          LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.pull_request.head.sha  || github.sha }}
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
           VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: lhci autorun --collect.headers="x-vercel-protection-bypass: $VERCEL_AUTOMATION_BYPASS_SECRET"
 
       # 7. Run Lighthouse desktop audit
       - name: Lighthouse desktop audit
-        run: lhci autorun --collect.settings.preset=desktop --collect.headers="x-vercel-protection-bypass: $VERCEL_AUTOMATION_BYPASS_SECRET"
         continue-on-error: true  # do not fail CI if LHCI fails
         env:
           LHCI_URL: "${{ env.PREVIEW_URL }}"
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
-          LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.push.head.sha }}
+          LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.pull_request.head.sha  || github.sha }}
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
           VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: lhci autorun --collect.settings.preset=desktop --collect.headers="x-vercel-protection-bypass: $VERCEL_AUTOMATION_BYPASS_SECRET"
