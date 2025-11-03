@@ -46,7 +46,11 @@ jobs:
       # 3. Installera dependencies exakt som i lockfilen
       - run: npm ci
 
-      # 4. Run Lighthouse CI
+      # Build the Next.js app
+      - name: Build Next.js app
+        run: npm run build
+
+      # 5. Run Lighthouse CI
       - name: Run Lighthouse CI on Vercel
         run: npx lhci autorun
         env:
