@@ -3,7 +3,7 @@
 module.exports = {
   ci: {
     collect: {
-      url: process.env.NODE_ENV === 'production' ? ['https://cloud-examinerande-uppgift-2-grupp.vercel.app/login'] : ['http://localhost:3000/login'],
+      url: process.env.NODE_ENV === 'production' ? [process.env.LHCI_URL] : ['http://localhost:3000/login'],
       startServerCommand: "npm run build && npm run start", // optional, if you need a dev server
       numberOfRuns: 3,
       static: false, // crucial for live SSR apps
