@@ -22,6 +22,19 @@ CREATE POLICY "Users can insert their own entries"
     FOR INSERT
     WITH CHECK (auth.uid() = user_id);
 
+-- Create policy: Users can update their own entries
+CREATE POLICY "Users can update their own entries"
+    ON public.entries
+    FOR UPDATE
+    USING (auth.uid() = user_id)
+    WITH CHECK (auth.uid() = user_id);
+
+-- Create policy: Users can delete their own entries
+CREATE POLICY "Users can delete their own entries"
+    ON public.entries
+    FOR DELETE
+    USING (auth.uid() = user_id);
+
 -- Create index for better query performance
 CREATE INDEX IF NOT EXISTS entries_user_id_idx ON public.entries(user_id);
 CREATE INDEX IF NOT EXISTS entries_created_at_idx ON public.entries(created_at DESC);

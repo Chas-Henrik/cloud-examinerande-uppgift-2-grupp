@@ -20,7 +20,7 @@ export default function EditModal({ entry, onCancel, onSave } : EditModalProps) 
 
   return (
     <div className="card fixed z-10" style={{ width: '500px', minWidth: '250px', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
-        <form onSubmit={() => onSave({...entry, title: title, content: content})} className="space-y-6">
+        <form onSubmit={(e) => {e.preventDefault(); onSave({...entry, title: title, content: content})}} className="space-y-6">
           <div>
             <label
               htmlFor="title"

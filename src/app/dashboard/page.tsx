@@ -46,6 +46,7 @@ export default function DashboardPage() {
   }, [router]);
 
   const deleteEntry = async (id : string) => {
+    console.log("Deleting entry with id:", id);
     try {
       const response = await fetch(`/api/entries/${id}`, {
         method: 'DELETE',
@@ -96,7 +97,7 @@ export default function DashboardPage() {
       loadData();
     } catch (err : unknown) {
       if (err instanceof Error) {
-        alert(`Error: ${err.message}`);
+        alert( `${err.message}`);
       } else {
         alert('An unknown error occurred');
       }
