@@ -34,7 +34,8 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          prod: false
+          github-comment: true
+          vercel-args: "--confirm"
         
       # 5. Save Vercel Preview URL as an environment variable for subsequent steps
       - name: Set Vercel preview URL env
