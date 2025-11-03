@@ -1,4 +1,4 @@
-// .lighthouserc.js
+// .lighthouserc.desktop.js
 
 module.exports = {
   ci: {
@@ -6,6 +6,9 @@ module.exports = {
       url: process.env.NODE_ENV === 'production' ? [process.env.LHCI_URL] : ['http://localhost:3000/login'],
       startServerCommand: "npm run build && npm run start", // optional, if you need a dev server
       numberOfRuns: 3,
+      settings: {
+        preset: "desktop"
+      },
       static: false, // crucial for live SSR apps
     },
     assert: {

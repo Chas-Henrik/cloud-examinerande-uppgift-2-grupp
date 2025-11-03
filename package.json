@@ -8,8 +8,8 @@
     "start": "next start",
     "test": "jest",
     "lint": "eslint",
-    "lhci:mobile": "npx lhci autorun",
-    "lhci:desktop": "npx lhci autorun --collect.settings.preset=desktop"
+    "lhci:mobile": "npx lhci autorun --config=.lighthouserc.mobile.js",
+    "lhci:desktop": "npx lhci autorun --config=.lighthouserc.desktop.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.76.1",
