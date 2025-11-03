@@ -39,10 +39,10 @@ jobs:
 
       # 5. Run Lighthouse mobile audit
       - name: lighthouse mobile audit
-        run: echo "LHCI_URL=${{ steps.vercel.outputs.preview-url }}" && lhci autorun
+        run: lhci autorun
         continue-on-error: true  # do not fail CI if LHCI fails
         env:
-          LHCI_URL: ${{ steps.vercel.outputs.preview-url }}
+          LHCI_URL: "${{ steps.vercel.outputs.preview-url }}/login"
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
           LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.push.head.sha }}
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL}}
@@ -55,7 +55,7 @@ jobs:
         run: lhci autorun --collect.settings.preset=desktop
         continue-on-error: true  # do not fail CI if LHCI fails
         env:
-          LHCI_URL: ${{ steps.vercel.outputs.preview-url }}
+          LHCI_URL: "${{ steps.vercel.outputs.preview-url }}/login"
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
           LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.push.head.sha }}
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL}}
