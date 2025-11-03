@@ -36,7 +36,7 @@ jobs:
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY}}
   
   lighthouseci:
-    if: github.event_name == 'push' # only run on PRs
+    if: github.event_name == 'pull_request' # only run on PRs
     runs-on: ubuntu-latest
 
     steps:
@@ -62,6 +62,8 @@ jobs:
           LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.push.head.sha }}
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL}}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY}}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
       # 5. Run Lighthouse desktop audit
       - name: lighthouse desktop audit
@@ -72,3 +74,5 @@ jobs:
           LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.push.head.sha }}
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL}}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY}}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
