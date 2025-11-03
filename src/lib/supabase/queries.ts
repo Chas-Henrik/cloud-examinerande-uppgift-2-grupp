@@ -1,10 +1,11 @@
-import { supabase } from './client'
+import { createAuthClient } from './client'
 import { Entry, NewEntry } from '@/types/database.types'
 
 /**
  * Fetch all entries for the authenticated user
  */
-export async function getEntries(): Promise<Entry[]> {
+export async function getEntries(sb_access_token: string): Promise<Entry[]> {
+  const supabase = createAuthClient(sb_access_token);
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
@@ -27,7 +28,8 @@ export async function getEntries(): Promise<Entry[]> {
 /**
  * Create a new entry for the authenticated user
  */
-export async function createEntry(entry: NewEntry): Promise<Entry> {
+export async function createEntry(sb_access_token: string, entry: NewEntry): Promise<Entry> {
+  const supabase = createAuthClient(sb_access_token);
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {

@@ -1,7 +1,7 @@
 ## 📝 Description
 Please include a summary of the changes and the related issue. 
 
-Fixes # (issue number)
+Fixes #(issue number)
 
 ## 🔍 Type of change
 

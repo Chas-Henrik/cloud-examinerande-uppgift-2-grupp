@@ -1,4 +1,4 @@
-import { supabase } from './client'
+import { supabase, createAuthClient } from './client'
 import { LoginCredentials, SignupCredentials } from '@/types/auth.types'
 
 /**
@@ -12,6 +12,11 @@ export async function signUp({ email, password }: SignupCredentials) {
 
   if (error) {
     throw error
+  }
+
+  if (!data.session) {
+    // No session created → likely user already exists or needs confirmation
+    throw new Error('User already exists or email not confirmed');
   }
 
   return data
@@ -47,7 +52,8 @@ export async function signOut() {
 /**
  * Get the current authenticated user
  */
-export async function getCurrentUser() {
+export async function getCurrentUser(sb_access_token: string) {
+  const supabase = createAuthClient(sb_access_token);
   const { data: { user } } = await supabase.auth.getUser()
   return user
 }

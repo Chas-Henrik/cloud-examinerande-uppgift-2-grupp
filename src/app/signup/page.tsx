@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { signUp } from "@/lib/supabase/auth";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -30,7 +29,20 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
-      await signUp({ email, password });
+      // Call the register API 
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || "An error occurred during signup");
+      }
+
       router.push("/dashboard");
     } catch (err: unknown) {
       if (err instanceof Error) {
