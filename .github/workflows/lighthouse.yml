@@ -1,0 +1,51 @@
+# .github/workflows/lighthouse.yml
+
+name: CI
+
+on:
+  pull_request:   # triggers lighthouseci on PRs
+    branches:
+      - main
+      - development
+
+jobs:
+  lighthouseci:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Clone the repo into the GitHub Actions runner
+      - uses: actions/checkout@v4
+        with:
+            ref: ${{ github.event.push.head.sha }}
+
+      # 2. Install correct Node version in this machine
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # 3. Install dependencies exactly as in lockfile and LHCI CLI globally
+      - run: npm ci && npm install -g @lhci/cli@0.15.x
+
+      # 4. Run Lighthouse mobile audit
+      - name: lighthouse mobile audit
+        run: lhci autorun
+        continue-on-error: true  # do not fail CI if LHCI fails
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.push.head.sha }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL}}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY}}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      # 5. Run Lighthouse desktop audit
+      - name: lighthouse desktop audit
+        run: lhci autorun --collect.settings.preset=desktop
+        continue-on-error: true  # do not fail CI if LHCI fails
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.push.head.sha }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL}}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY}}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
