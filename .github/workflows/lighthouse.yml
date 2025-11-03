@@ -26,18 +26,6 @@ jobs:
       - run: npm ci && npm install -g @lhci/cli@0.15.x
 
       # 4. Capture Vercel Preview URL
-      - name: Wait for Deployment
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-        run: |
-          echo "Waiting for deployment to finish..."
-          preview_url=$(curl -s -H "Authorization: Bearer $VERCEL_TOKEN" "<https://api.vercel.com/v6/deployments?projectId=$>$VERCEL_PROJECT_ID&limit=1" | jq -r ".deployments[0].url")
-          while [[ $(curl -sL -w "%{http_code}\\\\n" "${preview_url}" -o /dev/null) != "200" ]]; do sleep 10; done
-          echo "Deployment finished. Preview URL: $preview_url"
-          echo "PREVIEW_URL=$preview_url" >> $GITHUB_ENV
-
-      # 4. Capture Vercel Preview URL
       - name: Deploy to Vercel Preview
         id: vercel
         uses: amondnet/vercel-action@v20
