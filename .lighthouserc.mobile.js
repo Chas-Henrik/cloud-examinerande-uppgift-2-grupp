@@ -17,7 +17,7 @@ module.exports = {
           downloadThroughputKbps: 1474.6,
           uploadThroughputKbps: 675
         },
-        emulatedUserAgent: "Mozilla/5.0 (Linux; Android 11; Pixel 5)"
+        emulatedUserAgent: "Mozilla/5.0 (Linux; Android 11; Pixel 5)"
       },
       static: false, // crucial for live SSR apps
     },
