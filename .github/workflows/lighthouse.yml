@@ -3,11 +3,11 @@
 name: Lighthouse CI
 
 on:
+  push:           # triggers lint-and-test on all branches
   pull_request:   # triggers Lighthouse CI on PRs
     branches:
       - main
       - development
-
 jobs:
   lighthouseci:
     runs-on: ubuntu-latest
