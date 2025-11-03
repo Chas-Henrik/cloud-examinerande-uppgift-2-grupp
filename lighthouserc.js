@@ -1,4 +1,8 @@
 // .lighthouserc.js
+const uploadTarget = process.env.LHCI_GITHUB_APP_TOKEN
+  ? 'lhci'
+  : 'temporary-public-storage';
+
 const isCI = process.env.CI === 'true'; // typical CI env variable
 
 module.exports = {
@@ -22,7 +26,7 @@ module.exports = {
       },
     },
     upload: {
-      target: isCI ? 'lhci' : 'temporary-public-storage', // switch automatically
+      target: uploadTarget,
       githubAppToken: isCI ? process.env.LHCI_GITHUB_APP_TOKEN : undefined,  // server token only in CI
     },
   },
