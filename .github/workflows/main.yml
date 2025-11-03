@@ -35,13 +35,18 @@ jobs:
     needs: lint-and-test  # run after tests
 
     steps:
+      # 1. Klona repot in i GitHub Actions-runnern
       - uses: actions/checkout@v4
+
+      # 2. Installera rätt Node-version i den här maskinen
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
 
+      # 3. Installera dependencies exakt som i lockfilen
       - run: npm ci
 
+      # 4. Run Lighthouse CI
       - name: Run Lighthouse CI on Vercel
         run: npx lhci autorun
         env:
