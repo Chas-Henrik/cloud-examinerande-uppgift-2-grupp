@@ -1,9 +1,9 @@
 # .github/workflows/lighthouse.yml
 
-name: CI
+name: Lighthouse CI
 
 on:
-  pull_request:   # triggers lighthouseci on PRs
+  pull_request:   # triggers Lighthouse CI on PRs
     branches:
       - main
       - development
@@ -18,47 +18,46 @@ jobs:
         with:
             ref: ${{ github.event.push.head.sha }}
 
-      # 2. Install correct Node version in this machine
+      # 2. Install correct Node version
       - uses: actions/setup-node@v4
         with:
           node-version: 22
 
-      # 3. Install dependencies exactly as in lockfile and LHCI CLI globally
+      # 3. Install dependencies and LHCI CLI globally
       - run: npm ci && npm install -g @lhci/cli@0.15.x
 
-      # 4. Capture Vercel Preview URL
+      # 4. Deploy to Vercel Preview
       - name: Deploy to Vercel Preview
         id: vercel
-        uses: amondnet/vercel-action@v20
+        uses: vercel/action@v2
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          working-directory: ./
-          github-comment: true
+          prod: false
+        
+      # 5. Save Vercel Preview URL as an environment variable for subsequent steps
+      - name: Set Vercel preview URL env
+        run: echo "PREVIEW_URL=${{ steps.vercel.outputs.preview-url }}/login" >> $GITHUB_ENV
 
-      # 5. Run Lighthouse mobile audit
-      - name: lighthouse mobile audit
+      # 6. Run Lighthouse mobile audit
+      - name: Lighthouse mobile audit
         run: lhci autorun
         continue-on-error: true  # do not fail CI if LHCI fails
         env:
-          LHCI_URL: "${{ steps.vercel.outputs.preview-url }}/login"
+          LHCI_URL: "${{ env.PREVIEW_URL }}"
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
           LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.push.head.sha }}
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL}}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY}}
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
-      # 6. Run Lighthouse desktop audit
-      - name: lighthouse desktop audit
+      # 7. Run Lighthouse desktop audit
+      - name: Lighthouse desktop audit
         run: lhci autorun --collect.settings.preset=desktop
         continue-on-error: true  # do not fail CI if LHCI fails
         env:
-          LHCI_URL: "${{ steps.vercel.outputs.preview-url }}/login"
+          LHCI_URL: "${{ env.PREVIEW_URL }}"
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
           LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.push.head.sha }}
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL}}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY}}
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
