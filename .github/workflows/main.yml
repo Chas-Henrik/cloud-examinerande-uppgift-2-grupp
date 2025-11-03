@@ -57,7 +57,7 @@ jobs:
       - name: Run Lighthouse Collect
         run: |
           LHCI_BUILD_CONTEXT__CURRENT_HASH=github-actions \
-          lhci collect --config=lighthouserc.js || true
+          npx lhci collect --config=lighthouserc.js || true
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
@@ -67,7 +67,7 @@ jobs:
       - name: Run Lighthouse Upload
         run: |
           LHCI_BUILD_CONTEXT__CURRENT_HASH=github-actions \
-          lhci upload --config=lighthouserc.js || true
+          npx lhci upload --config=lighthouserc.js || true
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
