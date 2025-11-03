@@ -40,6 +40,9 @@ jobs:
       - name: Set Vercel Preview URL env
         run: echo "PREVIEW_URL=${{ steps.vercel.outputs.preview-url }}/login" >> $GITHUB_ENV
 
+      - name: Debug secret
+        run: curl -v -H "x-vercel-protection-bypass:$VERCEL_AUTOMATION_BYPASS_SECRET" ${{ env.PREVIEW_URL }}
+
       # 6. Run Lighthouse mobile audit
       - name: Lighthouse mobile audit
         continue-on-error: true  # do not fail CI if LHCI fails
