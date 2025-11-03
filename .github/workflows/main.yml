@@ -2,42 +2,34 @@ name: CI
 
 on:
   push:
-    branches:
-      - '**'   # all branches
 
-  pull_request:
-    branches:
-      - main
-      - development
-jobs:
-  lint-and-test:
-    if: ${{ github.event_name == 'push' }}
-    runs-on: ubuntu-latest
+  jobs:
+    lint-and-test:
+      runs-on: ubuntu-latest
 
-    steps:
-      # 1. Klona repot in i GitHub Actions-runnern
-      - uses: actions/checkout@v4
+      steps:
+        # 1. Klona repot in i GitHub Actions-runnern
+        - uses: actions/checkout@v4
 
-      # 2. Installera rätt Node-version i den här maskinen
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
+        # 2. Installera rätt Node-version i den här maskinen
+        - uses: actions/setup-node@v4
+          with:
+            node-version: 22
 
-      # 3. Installera dependencies exakt som i lockfilen
-      - run: npm ci
+        # 3. Installera dependencies exakt som i lockfilen
+        - run: npm ci
 
-      # 4. Kör lintern (Next.js har next lint inbyggt)
-      - run: npm run lint
+        # 4. Kör lintern (Next.js har next lint inbyggt)
+        - run: npm run lint
 
-      # 5. Kör testerna (inkl. det som failar)
-      - name: Run tests
-        run: npm test
-        env:
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL}}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY}}
+        # 5. Kör testerna (inkl. det som failar)
+        - name: Run tests
+          run: npm test
+          env:
+            NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL}}
+            NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY}}
   
   lighthouseci:
-    if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
