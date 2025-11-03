@@ -11,13 +11,18 @@ module.exports = {
     assert: {
       preset: "lighthouse:no-pwa",
       assertions: {
-        "color-contrast": "off",
+        // Critical issues that will fail CI
+        "errors-in-console": "fail",
+        "accessibility": "fail", // optional if you want to enforce accessibility
+
+        // Warnings for non-critical issues
         "legacy-javascript": "warn",
-        "document-latency-insight": "warn",
-        "errors-in-console": "warn",
+        "legacy-javascript-insight": "warn",
+        "network-dependency-tree-insight": "warn",
+        "render-blocking-resources": "warn",
         "unused-javascript": "warn",
-        "render-blocking-insight": "warn",
         "redirects": "warn",
+        "document-latency-insight": "warn",
       },
     },
     upload: {
