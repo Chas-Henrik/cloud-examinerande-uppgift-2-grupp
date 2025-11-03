@@ -1,3 +1,11 @@
+---
+name: Hotfix
+about: Urgent bugs or urgent required features
+title: ''
+labels: hotfix
+assignees: ''
+---
+
 ## 📝 Description
 Summarize the issue
 

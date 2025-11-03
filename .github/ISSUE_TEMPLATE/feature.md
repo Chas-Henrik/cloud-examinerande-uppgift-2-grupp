@@ -1,3 +1,11 @@
+---
+name: Feature
+about: Feature that should be added
+title: ''
+labels: feature
+assignees: ''
+---
+
 ## 📝 Description
 Summarize the issue
 
