@@ -8,21 +8,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Klona repot in i GitHub Actions-runnern
+      # 1. Clone the repo into the GitHub Actions runner
       - uses: actions/checkout@v4
 
-      # 2. Installera rätt Node-version i den här maskinen
+      # 2. Install correct Node version in this machine
       - uses: actions/setup-node@v4
         with:
           node-version: 22
 
-      # 3. Installera dependencies exakt som i lockfilen
+      # 3. Install dependencies exactly as in lockfile
       - run: npm ci
 
-      # 4. Kör lintern (Next.js har next lint inbyggt)
+      # 4. Run linter (Next.js has next lint built-in)
       - run: npm run lint
 
-      # 5. Kör testerna (inkl. det som failar)
+      # 5. Run tests (including those that fail)
       - name: Run tests
         run: npm test
         env:
@@ -35,15 +35,15 @@ jobs:
     needs: lint-and-test  # run after tests
 
     steps:
-      # 1. Klona repot in i GitHub Actions-runnern
+      # 1. Clone the repo into the GitHub Actions runner
       - uses: actions/checkout@v4
 
-      # 2. Installera rätt Node-version i den här maskinen
+      # 2. Install correct Node version in this machine
       - uses: actions/setup-node@v4
         with:
           node-version: 22
 
-      # 3. Installera dependencies exakt som i lockfilen
+      # 3. Install dependencies exactly as in lockfile
       - run: npm ci
 
       # 4. Build the Next.js app
@@ -53,10 +53,35 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL}}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY}}
 
-      # 5. Run Lighthouse CI
-      - name: Run Lighthouse CI on Vercel
-        run: npx lhci autorun
+      # 5. Run Lighthouse Collect
+      - name: Run Lighthouse Collect
+        run: |
+          LHCI_BUILD_CONTEXT__CURRENT_HASH=github-actions \
+          lhci collect --config=lighthouserc.js || true
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
+      # 6. Upload the results
+      - name: Run Lighthouse Upload
+        run: |
+          LHCI_BUILD_CONTEXT__CURRENT_HASH=github-actions \
+          lhci upload --config=lighthouserc.js || true
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
+      # 7. List report files for debugging
+      - name: Show report files
+        run: ls -l .lighthouseci
+
+      # 8. Upload Lighthouse report as artifact
+      - name: Upload Lighthouse Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: |
+            .lighthouseci/*.html
+            .lighthouseci/*.json
