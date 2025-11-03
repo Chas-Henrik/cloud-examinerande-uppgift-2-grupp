@@ -52,7 +52,9 @@ jobs:
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-        run: lhci autorun --config=.lighthouserc.desktop.js
+        run: |
+          mkdir -p ./.lighthouseci/desktop
+          lhci collect --config=.lighthouserc.desktop.js --output-path=./.lighthouseci/desktop
 
       # 7. Run Lighthouse mobile audit
       - name: Lighthouse mobile audit
@@ -66,4 +68,16 @@ jobs:
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-        run: lhci autorun --config=.lighthouserc.mobile.js
+        run: |
+          mkdir -p ./.lighthouseci/mobile
+          lhci collect --config=.lighthouserc.mobile.js --output-path=./.lighthouseci/mobile
+
+      # 8. Upload both audits together
+      - name: Upload Lighthouse Reports
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+        run: |
+          # Merge both collected folders for upload
+          cp -r ./.lighthouseci/desktop/* ./.lighthouseci/
+          cp -r ./.lighthouseci/mobile/* ./.lighthouseci/
+          lhci upload --target=temporary-public-storage --output-path=./.lighthouseci
