@@ -51,8 +51,7 @@ jobs:
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
-        run: lhci autorun --collect.settings.preset=desktop --collect.settings.emulatedFormFactor=mobile --collect.headers="x-vercel-protection-bypass:$VERCEL_AUTOMATION_BYPASS_SECRET"
+        run: lhci autorun --collect.settings.preset=desktop --collect.settings.emulatedFormFactor=mobile
 
       # 7. Run Lighthouse desktop audit
       - name: Lighthouse desktop audit
@@ -65,5 +64,4 @@ jobs:
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
-        run: lhci autorun --collect.settings.preset=desktop --collect.headers="x-vercel-protection-bypass:$VERCEL_AUTOMATION_BYPASS_SECRET"
+        run: lhci autorun --collect.settings.preset=desktop --collect.settings.emulatedFormFactor=desktop
