@@ -22,7 +22,7 @@ module.exports = {
       static: false, // crucial for live SSR apps
     },
     assert: {
-      preset: "lighthouse:no-pwa",
+      preset: process.env.NODE_ENV === 'production' ? "lighthouse:no-pwa" : "lighthouse:recommended",
       assertions: {
         // Critical issues that will fail CI
         "errors-in-console": "fail",
