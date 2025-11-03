@@ -39,7 +39,7 @@ jobs:
         
       # 5. Save Vercel Preview URL as an environment variable for subsequent steps
       - name: Set Vercel preview URL env
-        run: echo "PREVIEW_URL=${{ steps.vercel.outputs.preview-url }}/login" >> $GITHUB_ENV
+        run: echo "PREVIEW_URL=${{ steps.vercel.outputs.preview-url }}/" >> $GITHUB_ENV
 
       # 6. Run Lighthouse mobile audit
       - name: Lighthouse mobile audit
