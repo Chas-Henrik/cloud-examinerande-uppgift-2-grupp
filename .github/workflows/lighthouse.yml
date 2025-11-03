@@ -42,7 +42,7 @@ jobs:
 
       # 6. Run Lighthouse desktop audit
       - name: Lighthouse desktop audit
-        continue-on-error: true  # do not fail CI if LHCI fails
+        continue-on-error: true  # Do not fail CI if LHCI fails
         env:
           LHCI_URL: ${{ env.PREVIEW_URL }}
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
@@ -56,7 +56,7 @@ jobs:
 
       # 7. Run Lighthouse mobile audit
       - name: Lighthouse mobile audit
-        continue-on-error: true  # do not fail CI if LHCI fails
+        continue-on-error: true  # Do not fail CI if LHCI fails
         env:
           LHCI_URL: ${{ env.PREVIEW_URL }}
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
