@@ -27,7 +27,7 @@ jobs:
       - run: npm ci && npm install -g @lhci/cli@0.15.x
 
       # 4. Capture Vercel Preview URL
-      - name: Capture Vercel Preview URL
+      - name: Deploy to Vercel Preview
         id: vercel
         uses: amondnet/vercel-action@v20
         with:
@@ -36,17 +36,13 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           working-directory: ./
           github-comment: true
-      
-      # 5. Save Vercel Preview URL as an environment variable for subsequent steps
-      - name: Set Vercel Preview URL env
-        run: echo "PREVIEW_URL=${{ steps.vercel.outputs.preview-url }}/login" >> $GITHUB_ENV
 
-      # 6. Run Lighthouse mobile audit
+      # 5. Run Lighthouse mobile audit
       - name: Lighthouse mobile audit
         run: lhci autorun
         continue-on-error: true  # do not fail CI if LHCI fails
         env:
-          LHCI_URL: "${{ env.PREVIEW_URL }}"
+          LHCI_URL: "${{ steps.vercel.outputs.preview-url }}/login"
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
           LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.push.head.sha }}
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
@@ -54,12 +50,12 @@ jobs:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
-      # 7. Run Lighthouse desktop audit
+      # 6. Run Lighthouse desktop audit
       - name: Lighthouse desktop audit
         run: lhci autorun --collect.settings.preset=desktop
         continue-on-error: true  # do not fail CI if LHCI fails
         env:
-          LHCI_URL: "${{ env.PREVIEW_URL }}"
+          LHCI_URL: "${{ steps.vercel.outputs.preview-url }}/login"
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
           LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.push.head.sha }}
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
