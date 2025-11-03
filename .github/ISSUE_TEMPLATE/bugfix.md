@@ -1,3 +1,11 @@
+---
+name: Bugfix
+about: Report a bug or problem
+title: ''
+labels: bug
+assignees: ''
+---
+
 ## 📝 Description
 Summarize the issue
 
