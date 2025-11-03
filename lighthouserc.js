@@ -3,7 +3,7 @@
 module.exports = {
   ci: {
     collect: {
-      url: ['https://cloud-examinerande-uppgift-2-grupp.vercel.app'],
+      url: ['https://cloud-examinerande-uppgift-2-grupp.vercel.app/login'],
       startServerCommand: "npm start", // optional, if you need a dev server
       numberOfRuns: 3,
       static: false, // crucial for live SSR apps
