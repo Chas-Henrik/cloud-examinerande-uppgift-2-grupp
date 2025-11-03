@@ -47,7 +47,6 @@ jobs:
           LHCI_URL: ${{ env.PREVIEW_URL }}
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
           LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.pull_request.head.sha }}
-          LHCI_COLLECT__SETTINGS__PSI_STRATEGY: "desktop"
           LHCI_UPLOAD__GITHUB_STATUS_CONTEXT_SUFFIX: "/desktop"
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
@@ -62,7 +61,6 @@ jobs:
           LHCI_URL: ${{ env.PREVIEW_URL }}
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
           LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.pull_request.head.sha }}
-          LHCI_COLLECT__SETTINGS__PSI_STRATEGY: "mobile"
           LHCI_UPLOAD__GITHUB_STATUS_CONTEXT_SUFFIX: "/mobile"
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
