@@ -40,20 +40,7 @@ jobs:
       - name: Set Vercel Preview URL env
         run: echo "PREVIEW_URL=${{ steps.vercel.outputs.preview-url }}/login" >> $GITHUB_ENV
 
-      # 6. Run Lighthouse mobile audit
-      - name: Lighthouse mobile audit
-        continue-on-error: true  # do not fail CI if LHCI fails
-        env:
-          LHCI_URL: ${{ env.PREVIEW_URL }}
-          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
-          LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.pull_request.head.sha }}
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-        run: lhci autorun --collect.settings.preset=desktop --collect.settings.emulatedFormFactor=mobile
-
-      # 7. Run Lighthouse desktop audit
+      # 6. Run Lighthouse desktop audit
       - name: Lighthouse desktop audit
         continue-on-error: true  # do not fail CI if LHCI fails
         env:
@@ -65,3 +52,16 @@ jobs:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
         run: lhci autorun --collect.settings.preset=desktop --collect.settings.emulatedFormFactor=desktop
+
+      # 7. Run Lighthouse mobile audit
+      - name: Lighthouse mobile audit
+        continue-on-error: true  # do not fail CI if LHCI fails
+        env:
+          LHCI_URL: ${{ env.PREVIEW_URL }}
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.pull_request.head.sha }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: lhci autorun --collect.settings.preset=desktop --collect.settings.emulatedFormFactor=mobile
