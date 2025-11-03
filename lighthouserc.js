@@ -13,10 +13,10 @@ module.exports = {
       preset: "lighthouse:no-pwa",
       assertions: {
         "color-contrast": "off",
+        "legacy-javascript": "warn",
         "document-latency-insight": "warn",
         "errors-in-console": "warn",
         "unused-javascript": "warn",
-        "legacy-javascript": "warn",
         "render-blocking-insight": "warn",
         "redirects": "warn",
       },
