@@ -45,8 +45,8 @@ jobs:
         with:
           node-version: 22
 
-      # 3. Install dependencies exactly as in lockfile
-      - run: npm ci
+      # 3. Install dependencies exactly as in lockfile and LHCI CLI globally
+      - run: npm ci && npm install -g @lhci/cli@0.15.x
 
       # 4. Run Lighthouse mobile audit
       - name: lighthouse mobile audit
