@@ -3,7 +3,6 @@
 name: Lighthouse CI
 
 on:
-  push:           # triggers lint-and-test on all branches
   pull_request:   # triggers Lighthouse CI on PRs
     branches:
       - main
@@ -43,7 +42,7 @@ jobs:
 
       # 6. Run Lighthouse mobile audit
       - name: Lighthouse mobile audit
-        run: lhci autorun --collect.headers="x-vercel-protection-bypass: ${{ env.VERCEL_AUTOMATION_BYPASS_SECRET }}"
+        run: lhci autorun --collect.headers="x-vercel-protection-bypass: $VERCEL_AUTOMATION_BYPASS_SECRET"
         continue-on-error: true  # do not fail CI if LHCI fails
         env:
           LHCI_URL: "${{ env.PREVIEW_URL }}"
@@ -57,7 +56,7 @@ jobs:
 
       # 7. Run Lighthouse desktop audit
       - name: Lighthouse desktop audit
-        run: lhci autorun --collect.settings.preset=desktop --collect.headers="x-vercel-protection-bypass: ${{ env.VERCEL_AUTOMATION_BYPASS_SECRET }}"
+        run: lhci autorun --collect.settings.preset=desktop --collect.headers="x-vercel-protection-bypass: $VERCEL_AUTOMATION_BYPASS_SECRET"
         continue-on-error: true  # do not fail CI if LHCI fails
         env:
           LHCI_URL: "${{ env.PREVIEW_URL }}"
