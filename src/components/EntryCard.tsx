@@ -3,21 +3,24 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { formatDate } from '@/lib/dateFormatting'
 
 interface EntryCardProps {
   entry: Entry
-  handleEdit: (id : string) => void
-  handleDelete: (id : string) => void
+  onEdit: (id : string) => void
+  onDelete: (id : string) => void
 }
 
-export default function EntryCard({ entry, handleEdit, handleDelete }: EntryCardProps) {
+export default function EntryCard({ entry, onEdit, onDelete }: EntryCardProps) {
 
-  const formattedDate = formatDate(entry.created_at);
+  const formattedDate = new Date(entry.created_at).toLocaleDateString(undefined, {
+		year: "numeric",
+		month: "long",
+		day: "numeric",
+		hour: "2-digit",
+		minute: "2-digit",
+  });
 
   return (
     <div className="card relative" style={{ minWidth: '250px' }}>
@@ -25,8 +28,8 @@ export default function EntryCard({ entry, handleEdit, handleDelete }: EntryCard
         <DropdownMenu>
           <DropdownMenuTrigger className="cursor-pointer text-[18px]">. . .</DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => handleEdit(entry.id)}>Edit</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleDelete(entry.id)}>Delete</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onEdit(entry.id)}>Edit</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onDelete(entry.id)}>Delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

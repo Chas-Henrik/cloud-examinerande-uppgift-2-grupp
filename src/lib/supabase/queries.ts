@@ -64,7 +64,7 @@ export async function updateEntry(sb_access_token: string, id : string, entry: U
     throw new Error('User not authenticated')
   }
 
-  let updateData : any = {};
+  const updateData : UpdateEntry = {};
   if (entry.title !== undefined) updateData.title = entry.title;
   if (entry.content !== undefined) updateData.content = entry.content;
 
@@ -89,8 +89,6 @@ export async function deleteEntry(sb_access_token: string, id : string) : Promis
   if (!user) {
     throw new Error('User not authenticated')
   }
-
-  console.log("Deleting entry in query with id:", id);
 
   const { data, error } = await supabase
     .from('entries')

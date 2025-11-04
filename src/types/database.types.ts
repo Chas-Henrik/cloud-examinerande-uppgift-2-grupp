@@ -12,7 +12,6 @@ export interface NewEntry {
 }
 
 export interface UpdateEntry {
-  id: string
   title?: string
   content?: string
 }

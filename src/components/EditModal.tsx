@@ -1,7 +1,4 @@
 import { Entry } from '@/types/database.types'
-import { formatDate } from '@/lib/dateFormatting'
-import { ButtonGroup } from "@/components/ui/button-group"
-import { Button } from "@/components/ui/button"
 import { useState } from "react"
 
 interface EditModalProps {
@@ -14,13 +11,24 @@ export default function EditModal({ entry, onCancel, onSave } : EditModalProps) 
   const [content, setContent] = useState(entry ? entry.content : '');
   const [title, setTitle] = useState(entry ? entry.title : '');
 
+  // Check for changes and call onSave if there are any
+  const checkChanges = () => {
+
+    if (!entry) return;
+    if (content !== entry.content || title !== entry.title) {
+      onSave({ ...entry, content, title });
+    } else {
+      onCancel();
+    }
+  }
+
   if (!entry) {
     return;
   }
 
   return (
     <div className="card fixed z-10" style={{ width: '500px', minWidth: '250px', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
-        <form onSubmit={(e) => {e.preventDefault(); onSave({...entry, title: title, content: content})}} className="space-y-6">
+        <form onSubmit={(e) => {e.preventDefault(); checkChanges()}} className="space-y-6">
           <div>
             <label
               htmlFor="title"
@@ -35,6 +43,7 @@ export default function EditModal({ entry, onCancel, onSave } : EditModalProps) 
               onChange={(e) => setTitle(e.target.value)}
               className="input-field text-xl font-serif"
               placeholder="Give your entry a title..."
+              required
             />
           </div>
 

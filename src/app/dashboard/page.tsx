@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import EntryCard from "@/components/EntryCard";
@@ -16,8 +16,7 @@ export default function DashboardPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [editingEntryId, setEditingEntryId] = useState<string | null>(null);
 
-
-  async function loadData() {
+  const loadData = useCallback(async () => {
     try {
       const res = await fetch("/api/entries");
       if (!res.ok) {
@@ -40,13 +39,19 @@ export default function DashboardPage() {
     } finally {
       setLoading(false);
     }
-  }
-  useEffect(() => {
-    loadData();
   }, [router]);
 
-  const deleteEntry = async (id : string) => {
-    console.log("Deleting entry with id:", id);
+  useEffect(() => {
+    loadData();
+  }, [router, loadData]);
+
+  // Handle delete request
+  const handleDelete = async (id : string) => {
+    
+    if (!confirm("Are you sure you want to delete this entry?")) {
+      return;
+    }
+
     try {
       const response = await fetch(`/api/entries/${id}`, {
         method: 'DELETE',
@@ -57,7 +62,6 @@ export default function DashboardPage() {
         return;
       }
 
-      alert('Entry deleted successfully');
       loadData();
 
     } catch (err) { 
@@ -69,7 +73,8 @@ export default function DashboardPage() {
     } 
   };
 
-  const editEntry = (id : string) => {
+  // Handle edit request
+  const handleEdit = (id : string) => {
     if (!isEditing) {
       setIsEditing(true);
       setEditingEntryId(id);
@@ -91,7 +96,6 @@ export default function DashboardPage() {
         return;
       }
 
-      alert('Entry updated successfully');  
       setIsEditing(false);
       setEditingEntryId(null);
       loadData();
@@ -161,7 +165,7 @@ export default function DashboardPage() {
         ) : (
           <div className="space-y-8">
             {entries.map((entry) => (
-              <EntryCard key={entry.id} entry={entry} handleDelete={deleteEntry} handleEdit={editEntry} />
+              <EntryCard key={entry.id} entry={entry} onDelete={handleDelete} onEdit={handleEdit} />
             ))}
           </div>
         )}

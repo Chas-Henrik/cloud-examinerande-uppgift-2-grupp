@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { updateEntry, deleteEntry } from "@/lib/supabase/queries";
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(req: NextRequest, context: { params: Promise<{ id: string }>}) {
 
   // Check for authentication token
   const sb_access_token = req.cookies.get("sb_access_token")?.value;
@@ -10,20 +10,16 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     return NextResponse.json({ ok: false, message: "Unauthorized" }, { status: 401 });
   }
 
-  const { id } = await params;
+  const { id } = await context.params;
 
   const { title, content } = await req.json(); // Parse request body
-
-  let updateData: any = {};
-  if (title !== undefined) updateData.title = title;
-  if (content !== undefined) updateData.content = content;
   
-  const data = await updateEntry(sb_access_token, id, updateData);
+  await updateEntry(sb_access_token, id, { title, content });
 
-  return NextResponse.json({ ok: true, data: data });
+  return NextResponse.json({ ok: true, message: "Entry updated successfully" });
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, context: { params: Promise<{ id: string }>}) : Promise<NextResponse> {
 
   // Check for authentication token
   const sb_access_token = req.cookies.get("sb_access_token")?.value;
@@ -32,10 +28,10 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
     return NextResponse.json({ ok: false, message: "Unauthorized" }, { status: 401 });
   } 
 
-  const { id } = await params;
+  const { id } = await context.params;
 
-  const data = await deleteEntry(sb_access_token, id);
+  await deleteEntry(sb_access_token, id);
 
-  return NextResponse.json({ ok: true, data: data });
+  return NextResponse.json({ ok: true, message: "Entry deleted successfully" });
 }
 
