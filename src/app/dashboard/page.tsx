@@ -1,46 +1,112 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import EntryCard from "@/components/EntryCard";
 import { Entry } from "@/types/database.types";
 import Link from "next/link";
+import EditModal from "@/components/EditModal";
 
 export default function DashboardPage() {
   const router = useRouter();
   const [entries, setEntries] = useState<Entry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingEntryId, setEditingEntryId] = useState<string | null>(null);
+
+  const loadData = useCallback(async () => {
+    try {
+      const res = await fetch("/api/entries");
+      if (!res.ok) {
+        if (res.status === 401) {
+          router.push("/login");
+          return;
+        }
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Failed to load entries");
+      }
+      const { data } = await res.json();
+
+      setEntries(data);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError(String(err) || "Failed to load entries");
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [router]);
 
   useEffect(() => {
-    async function loadData() {
-      try {
-        const res = await fetch("/api/entries");
-        if (!res.ok) {
-          if (res.status === 401) {
-            router.push("/login");
-            return;
-          }
-          const errorData = await res.json();
-          throw new Error(errorData.message || "Failed to load entries");
-        }
-        const { data } = await res.json();
+    loadData();
+  }, [router, loadData]);
 
-        setEntries(data);
-      } catch (err: unknown) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError(String(err) || "Failed to load entries");
-        }
-      } finally {
-        setLoading(false);
-      }
+  // Handle delete request
+  const handleDelete = async (id : string) => {
+    
+    if (!confirm("Are you sure you want to delete this entry?")) {
+      return;
     }
 
-    loadData();
-  }, [router]);
+    try {
+      const response = await fetch(`/api/entries/${id}`, {
+        method: 'DELETE',
+      }); 
+
+      if (!response.ok) {
+        alert('Failed to delete entry');
+        return;
+      }
+
+      loadData();
+
+    } catch (err) { 
+      if (err instanceof Error) {
+        alert(`Error: ${err.message}`);
+      } else {
+        alert('An unknown error occurred');
+      }
+    } 
+  };
+
+  // Handle edit request
+  const handleEdit = (id : string) => {
+    if (!isEditing) {
+      setIsEditing(true);
+      setEditingEntryId(id);
+    } 
+  };
+
+  const saveEditedEntry = async (editedEntry : Entry) => {
+    try {
+      const response = await fetch(`/api/entries/${editedEntry.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ title: editedEntry.title, content: editedEntry.content }),
+      });
+
+      if (!response.ok) {
+        alert('Failed to save changes');
+        return;
+      }
+
+      setIsEditing(false);
+      setEditingEntryId(null);
+      loadData();
+    } catch (err : unknown) {
+      if (err instanceof Error) {
+        alert( `Error: ${err.message}`);
+      } else {
+        alert('An unknown error occurred');
+      }
+    }
+  };
 
   if (loading) {
     return (
@@ -99,11 +165,15 @@ export default function DashboardPage() {
         ) : (
           <div className="space-y-8">
             {entries.map((entry) => (
-              <EntryCard key={entry.id} entry={entry} />
+              <EntryCard key={entry.id} entry={entry} onDelete={handleDelete} onEdit={handleEdit} />
             ))}
           </div>
         )}
+        {isEditing && editingEntryId &&
+            <EditModal entry={entries.find(e => e.id === editingEntryId)} onCancel={() => {setIsEditing(false); setEditingEntryId(null)}} onSave={saveEditedEntry}/> 
+        }
       </main>
     </div>
   );
-}
+  
+};
