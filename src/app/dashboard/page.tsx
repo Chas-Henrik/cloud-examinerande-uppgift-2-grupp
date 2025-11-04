@@ -101,7 +101,7 @@ export default function DashboardPage() {
       loadData();
     } catch (err : unknown) {
       if (err instanceof Error) {
-        alert( `${err.message}`);
+        alert( `Error: ${err.message}`);
       } else {
         alert('An unknown error occurred');
       }
