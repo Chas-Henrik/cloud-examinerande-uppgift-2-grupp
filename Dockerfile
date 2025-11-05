@@ -37,6 +37,7 @@ ENV NODE_ENV=production
 # Only copy the needed files from builder stage
 COPY --from=builder /app/package*.json ./
 
+# Install only production dependencies
 RUN npm ci --only=production
 
 COPY --from=builder /app/.next ./.next
