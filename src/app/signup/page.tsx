@@ -29,7 +29,7 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
-      // Call the register API 
+      // Call the register API
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
@@ -58,9 +58,9 @@ export default function SignupPage() {
   return (
     <div className="min-h-screen flex items-center justify-center px-6 py-12">
       <div className="w-full max-w-md">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-serif text-dark-brown mb-3">Journal</h1>
-          <p className="text-warm-gray text-sm">Create your account</p>
+        <div className="text-center mb-12 text-dark-brown">
+          <h1 className="text-4xl font-serif mb-3">Journal</h1>
+          <p className="text-sm">Create your account</p>
         </div>
 
         <div className="card">
@@ -135,9 +135,9 @@ export default function SignupPage() {
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-sm text-warm-gray">
+            <p className="text-sm text-dark-brown">
               Already have an account?{" "}
-              <Link href="/login" className="text-dark-brown hover:underline">
+              <Link href="/login" className="underline">
                 Sign in
               </Link>
             </p>

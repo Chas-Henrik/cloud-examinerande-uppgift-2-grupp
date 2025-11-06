@@ -47,9 +47,9 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center px-6 py-12">
       <div className="w-full max-w-md">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-serif text-dark-brown mb-3">Journal</h1>
-          <p className="text-warm-gray text-sm">Sign in to your account</p>
+        <div className="text-center mb-12 text-dark-brown">
+          <h1 className="text-4xl font-serif mb-3">Journal</h1>
+          <p className="text-sm">Sign in to your account</p>
         </div>
 
         <div className="card">
@@ -106,9 +106,9 @@ export default function LoginPage() {
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-sm text-warm-gray">
+            <p className="text-sm text-dark-brown">
               Don&apos;t have an account?{" "}
-              <Link href="/signup" className="text-dark-brown hover:underline">
+              <Link href="/signup" className="underline">
                 Sign up
               </Link>
             </p>
