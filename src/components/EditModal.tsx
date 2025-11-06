@@ -27,7 +27,8 @@ export default function EditModal({ entry, onCancel, onSave } : EditModalProps) 
   }
 
   return (
-    <div className="card fixed z-10" style={{ width: '500px', minWidth: '250px', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
+    <div className="card fixed z-10" style={{ width: '500px', maxWidth: "95vw", maxHeight: "99vh", top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
+        <h2 className="flex justify-center text-2xl">Edit entry</h2>
         <form onSubmit={(e) => {e.preventDefault(); checkChanges()}} className="space-y-6">
           <div>
             <label
@@ -58,7 +59,7 @@ export default function EditModal({ entry, onCancel, onSave } : EditModalProps) 
               id="content"
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              className="input-field min-h-[400px] resize-y leading-relaxed"
+              className="input-field min-h-[300px] resize-y leading-relaxed"
               placeholder="Write your thoughts..."
               required
             />
