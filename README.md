@@ -62,3 +62,24 @@ This app follows a minimalist, editorial design approach:
 - [TypeScript Documentation](https://www.typescriptlang.org/docs)
 
 ## Fyll på med era reflektioner nedan!
+
+## Projektmetoder
+
+### Branching strategi
+Vi har använt oss av feature branching och hade då en main branch och en development. Main var branchen som sjösattes för produktion och development var den vi mergade feature branches med innan development mergades med main. Vi jobbade på feature branches och commitade där. Sedan squashade vi commitsen när vi mergade med development. Om en annan branch mergades med development efter att man hade branchat ut från development så rebasade vi branchen på development för att lösa eventuella mergekonflikter innan PR och för att säkerställa att koden fungerar tillsammans med det senaste på development.
+Main och development hade båda branch protection och minst en annan gruppmedlem var tvungen att göra review och godkänna PR innan merge.
+
+### Verktyg för projektplanering
+Vi använde Github Projects med en kanban board där vi la upp issues. Vi hade Issue Templates och och även PR Templates för konsekventa strukturer (se ISSUE_TEMPLATE och PULL_REQUEST_TEMPLATE i .github-foldern).
+
+### CI/CD
+För varje push till en branch så körs jobbet "lint-and-test" i github actions. Då körs lint och våra egna Jest-tester. 
+För varje skapad PR och varje push till en aktiv PR på development så körs "lint-and-test" och "lighthouseci". Dessa körs parallellt. (se lighthouse.yml och main.yml i .github/workflows). "lighthouseci" kör google lighthouse för desktop och mobile och genererar rapporter för båda. Pga tidsbrist så hann vi inte fixa alla lighthouse problem så därför stoppar vi inte pipelinen vid lighthouse fel, vi får bara två rapporter. Lighthouse körs på en previewdeploy på Vercel.
+Samma pipeline körs vid PR till main. Vercel lyssnar på main och gör en ny deploy när ändringar sker där.
+
+Vi valde att lägga till lighthouseci på varje PR för att det är viktigt att den kod som mergas in håller hög standard. T.ex. när vi ligger till en ny feature så märker vi om det är några allvarliga problem med tillgänglighet, prestanda eller SEO innan vi mergar med development och i slutändan main.
+Genom att köra för både desktop och mobile så kan vi också se om det är någon diskrepans dem emellan.
+
+### AI genererat
+Jest-testerna är genererade av Chat GPT och Co-pilot. Vi kopierade sidan vi ville testa och la in den i Chat GPT och bad den att generera Jest tester. Co-pilot bistod med auto-complete.
+

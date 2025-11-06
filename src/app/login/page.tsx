@@ -1,44 +1,64 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { signIn } from '@/lib/supabase/auth'
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function LoginPage() {
-  const router = useRouter()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError(null)
-    setLoading(true)
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
 
     try {
-      await signIn({ email, password })
-      router.push('/dashboard')
-    } catch (err: any) {
-      setError(err.message || 'An error occurred during login')
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (res.ok) {
+        router.push("/dashboard");
+      } else {
+        const data = await res.json();
+        setError(data.message || "An error occurred during login");
+      }
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else if (typeof err === "string") {
+        setError(err);
+      } else {
+        setError("An error occurred during login");
+      }
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center px-6 py-12">
       <div className="w-full max-w-md">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-serif text-dark-brown mb-3">Journal</h1>
-          <p className="text-warm-gray text-sm">Sign in to your account</p>
+        <div className="text-center mb-12 text-dark-brown">
+          <h1 className="text-4xl font-serif mb-3">Journal</h1>
+          <p className="text-sm">Sign in to your account</p>
         </div>
 
         <div className="card">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm mb-2 text-dark-brown">
+              <label
+                htmlFor="email"
+                className="block text-sm mb-2 text-dark-brown"
+              >
                 Email
               </label>
               <input
@@ -53,7 +73,10 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm mb-2 text-dark-brown">
+              <label
+                htmlFor="password"
+                className="block text-sm mb-2 text-dark-brown"
+              >
                 Password
               </label>
               <input
@@ -78,14 +101,14 @@ export default function LoginPage() {
               className="btn-primary w-full"
               disabled={loading}
             >
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? "Signing in..." : "Sign In"}
             </button>
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-sm text-warm-gray">
-              Don't have an account?{' '}
-              <Link href="/signup" className="text-dark-brown hover:underline">
+            <p className="text-sm text-dark-brown">
+              Don&apos;t have an account?{" "}
+              <Link href="/signup" className="underline">
                 Sign up
               </Link>
             </p>
@@ -93,5 +116,5 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

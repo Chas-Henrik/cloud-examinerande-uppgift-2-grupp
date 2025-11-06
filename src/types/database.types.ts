@@ -10,3 +10,8 @@ export interface NewEntry {
   title: string
   content: string
 }
+
+export interface UpdateEntry {
+  title?: string
+  content?: string
+}
