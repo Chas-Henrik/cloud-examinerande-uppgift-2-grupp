@@ -1,4 +1,7 @@
 import { Entry } from '@/types/database.types'
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,12 +40,16 @@ export default function EntryCard({ entry, onEdit, onDelete }: EntryCardProps) {
         <div className="text-xs text-warm-gray mb-2 tracking-wide uppercase">
           {formattedDate}
         </div>
-        <h2 className="text-2xl font-serif text-dark-brown mb-3">{entry.title}</h2>
+        <h2 className="text-2xl font-serif text-dark-brown mb-3">
+          {entry.title}
+        </h2>
       </div>
-      <p className="text-dark-brown/80 leading-relaxed whitespace-pre-wrap">
-        {entry.content}
-      </p>
-
+      <div
+        className="text-dark-brown/80 leading-relaxed whitespace-pre-wrap"
+        style={{ width: "200px" }}
+      >
+        <Markdown remarkPlugins={[remarkGfm]}>{entry.content}</Markdown>
+      </div>
     </div>
-  )
+  );
 }
