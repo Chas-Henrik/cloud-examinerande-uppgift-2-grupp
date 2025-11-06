@@ -32,4 +32,4 @@ jobs:
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY}}
 
       # 6. Run security audit
-      - run: npm audit --audit-level=high
+      - run: npm audit --audit-level=low
