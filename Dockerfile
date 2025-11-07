@@ -38,7 +38,7 @@ ENV NODE_ENV=production
 COPY --from=builder /app/package*.json ./
 
 # Install only production dependencies
-RUN npm ci --only=production
+RUN npm ci --omit=dev --only=production
 
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
