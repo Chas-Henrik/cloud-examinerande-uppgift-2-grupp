@@ -29,11 +29,12 @@ jobs:
         run: |
           OWNER_LC=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
           REPO_NAME=$(basename "${{ github.repository }}")
-          BRANCH_NAME=${GITHUB_REF_NAME}
+          # Sanitize branch name: lowercase and replace invalid chars
+          BRANCH_NAME_SAFE=$(echo "${GITHUB_REF_NAME}" | tr '[:upper:]' '[:lower:]' | tr '/_' '--')
           COMMIT_SHA=${GITHUB_SHA::7}
 
           IMAGE_BASE=ghcr.io/$OWNER_LC/$REPO_NAME
-          IMAGE_BRANCH_TAG=$IMAGE_BASE:${BRANCH_NAME,,}
+          IMAGE_BRANCH_TAG=$IMAGE_BASE:$BRANCH_NAME_SAFE
           IMAGE_COMMIT_TAG=$IMAGE_BASE:$COMMIT_SHA
           IMAGE_LATEST_TAG=$IMAGE_BASE:latest
 
@@ -43,11 +44,11 @@ jobs:
           echo "  $IMAGE_LATEST_TAG"
 
           docker build \
-            --build-arg NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }} \
-            --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }} \
-            -t $IMAGE_BRANCH_TAG \
-            -t $IMAGE_COMMIT_TAG \
-            -t $IMAGE_LATEST_TAG .
+          --build-arg NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }} \
+          --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }} \
+          -t $IMAGE_BRANCH_TAG \
+          -t $IMAGE_COMMIT_TAG \
+          -t $IMAGE_LATEST_TAG .
 
       # 4️⃣ Push Docker image to GitHub Container Registry
       - name: Push Docker image
