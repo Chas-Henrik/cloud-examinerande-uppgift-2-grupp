@@ -17,7 +17,7 @@ ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY
 COPY package*.json ./
 
 # Install all dependencies (including devDependencies)
-RUN npm audit fix && npm install
+RUN npm ci
 
 # Kopiera all kod
 COPY . .
