@@ -19,29 +19,51 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.CR_PAT }}
 
       # 3️⃣ Build Docker image
       - name: Build Docker image
         run: |
           OWNER_LC=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
-          IMAGE_NAME=ghcr.io/$OWNER_LC/journal:latest
-          echo "Building image: $IMAGE_NAME"
+          REPO_NAME=$(basename "${{ github.repository }}")
+          BRANCH_NAME=${GITHUB_REF_NAME}
+          COMMIT_SHA=${GITHUB_SHA::7}
+
+          IMAGE_BASE=ghcr.io/$OWNER_LC/$REPO_NAME
+          IMAGE_BRANCH_TAG=$IMAGE_BASE:${BRANCH_NAME,,}
+          IMAGE_COMMIT_TAG=$IMAGE_BASE:$COMMIT_SHA
+          IMAGE_LATEST_TAG=$IMAGE_BASE:latest
+
+          echo "Building image:"
+          echo "  $IMAGE_BRANCH_TAG"
+          echo "  $IMAGE_COMMIT_TAG"
+          echo "  $IMAGE_LATEST_TAG"
+
           docker build \
             --build-arg NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }} \
             --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }} \
-            -t $IMAGE_NAME .
+            -t $IMAGE_BRANCH_TAG \
+            -t $IMAGE_COMMIT_TAG \
+            -t $IMAGE_LATEST_TAG .
 
       # 4️⃣ Push Docker image to GitHub Container Registry
       - name: Push Docker image
         run: |
           OWNER_LC=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
-          IMAGE_NAME=ghcr.io/$OWNER_LC/journal:latest
-          docker push $IMAGE_NAME
+          REPO_NAME=$(basename "${{ github.repository }}")
+          BRANCH_NAME=${GITHUB_REF_NAME}
+          COMMIT_SHA=${GITHUB_SHA::7}
+
+          IMAGE_BASE=ghcr.io/$OWNER_LC/$REPO_NAME
+          docker push --all-tags $IMAGE_BASE
 
       # 5️⃣ Pull Docker image to verify
       - name: Pull Docker image
         run: |
           OWNER_LC=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
-          IMAGE_NAME=ghcr.io/$OWNER_LC/journal:latest
+          REPO_NAME=$(basename "${{ github.repository }}")
+          COMMIT_SHA=${GITHUB_SHA::7}
+
+          IMAGE_NAME=ghcr.io/$OWNER_LC/$REPO_NAME:$COMMIT_SHA
+          echo "Pulling image: $IMAGE_NAME"
           docker pull $IMAGE_NAME
