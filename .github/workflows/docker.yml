@@ -1,11 +1,14 @@
 name: Build, Push & Pull Docker Image
 
 on:
-  push:
+  pull_request:   # triggers Docker CI on PRs
+    branches:
+      - main
+      - development
   workflow_dispatch:  # allows manual triggering
 
 jobs:
-  docker:
+  dockerci:
     runs-on: ubuntu-latest
 
     steps:
