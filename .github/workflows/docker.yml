@@ -1,7 +1,8 @@
 name: Build, Push & Pull Docker Image
 
+
 on:
-  pull_request:   # triggers Docker CI on PRs
+  push:     # trigger Docker CI on push to development & main branches
     branches:
       - main
       - development
