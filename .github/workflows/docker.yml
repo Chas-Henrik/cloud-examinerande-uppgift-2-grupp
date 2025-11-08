@@ -45,8 +45,6 @@ jobs:
           echo "  $IMAGE_LATEST_TAG"
 
           docker build \
-          --build-arg NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }} \
-          --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }} \
           -t $IMAGE_BRANCH_TAG \
           -t $IMAGE_COMMIT_TAG \
           -t $IMAGE_LATEST_TAG .
