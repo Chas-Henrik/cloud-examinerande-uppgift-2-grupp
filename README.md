@@ -103,4 +103,4 @@ Jest-testerna är genererade av Chat GPT och Co-pilot. Vi kopierade sidan vi vil
 **Advanced Features**
 - CI Security Scanning (npm audit)
 - Lighthouse CI
-- Bygga och pusha Docker images automatiskt i CI till GitHub Package Registry
+- Bygga och pusha Docker Images automatiskt i CI till GitHub Package Registry
