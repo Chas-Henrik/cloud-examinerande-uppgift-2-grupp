@@ -38,3 +38,22 @@ CREATE POLICY "Users can delete their own entries"
 -- Create index for better query performance
 CREATE INDEX IF NOT EXISTS entries_user_id_idx ON public.entries(user_id);
 CREATE INDEX IF NOT EXISTS entries_created_at_idx ON public.entries(created_at DESC);
+
+
+-- Create user-files table
+CREATE TABLE IF NOT EXISTS public.user-files (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+    file_name text NOT NULL,
+    bucket_id text NOT NULL,
+    path_name text NOT NULL,
+    mime_type text NOT NULL,
+    file_size bigint NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Enable Row Level Security
+ALTER TABLE public.user-files ENABLE ROW LEVEL SECURITY;
+
+-- Create index for better query performance
+CREATE INDEX IF NOT EXISTS entries_user_id_idx ON public.entries(user_id);
