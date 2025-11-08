@@ -83,3 +83,24 @@ Genom att köra för både desktop och mobile så kan vi också se om det är n�
 ### AI genererat
 Jest-testerna är genererade av Chat GPT och Co-pilot. Vi kopierade sidan vi ville testa och la in den i Chat GPT och bad den att generera Jest tester. Co-pilot bistod med auto-complete.
 
+### Bug Fixes
+- "Titeln är" buggen är fixad
+- Responsiviteten för mobil på inläggslistan är fixad
+- Felaktigt datum format är fixad
+- Allt görs i Frontend: Frontend & Backend har separerats med NextJS API-routes
+
+### Supported Features
+
+**Basic Features**
+- Issue Templates för nya buggar/dokument/features/hotfixar
+- Pull Request Templates för nya buggar/dokument/features/hotfixar
+- Redigering av inlägg
+- Borttagning av inlägg
+- Markdownsupport för inläggen
+- Optimerad Docker Image (1.33GB)
+- Unit tester med Jest
+
+**Advanced Features**
+- CI Security Scanning (npm audit)
+- Lighthouse CI
+- Bygga och pusha Docker images automatiskt i CI till GitHub Package Registry
