@@ -10,7 +10,7 @@ jobs:
   dockerci:
     runs-on: ubuntu-latest
     environment:
-      name: preview
+      name: Preview
     steps:
       # 1️⃣ Clone the repo into the GitHub Actions runner
       - name: Clone repository
