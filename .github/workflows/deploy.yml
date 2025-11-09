@@ -1,16 +1,16 @@
-name: Docker Image Preview
+name: Docker Image Deploy
 
 on:
-  push:     # trigger Docker CI on push to development branch
+  push:     # trigger Deploy CI on push to main branch
     branches:
-      - development
+      - main
   workflow_dispatch:  # allows manual triggering
 
 jobs:
-  dockerci:
+  deployci:
     runs-on: ubuntu-latest
     environment:
-      name: preview
+      name: production
     steps:
       # 1️⃣ Clone the repo into the GitHub Actions runner
       - name: Clone repository
