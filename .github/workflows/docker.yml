@@ -1,4 +1,4 @@
-name: Build, Push & Pull Docker Image
+name: Docker Image Preview
 
 on:
   push:     # trigger Docker CI on push to development branch

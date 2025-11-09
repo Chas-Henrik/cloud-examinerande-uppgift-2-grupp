@@ -1,4 +1,4 @@
-name: Build, Push & Pull Docker Image
+name: Docker Image Deploy
 
 on:
   push:     # trigger Deploy CI on push to main branch
