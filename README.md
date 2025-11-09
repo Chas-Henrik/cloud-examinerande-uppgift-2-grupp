@@ -80,6 +80,10 @@ Samma pipeline körs vid PR till main. Vercel lyssnar på main och gör en ny de
 Vi valde att lägga till lighthouseci på varje PR för att det är viktigt att den kod som mergas in håller hög standard. T.ex. när vi ligger till en ny feature så märker vi om det är några allvarliga problem med tillgänglighet, prestanda eller SEO innan vi mergar med development och i slutändan main.
 Genom att köra för både desktop och mobile så kan vi också se om det är någon diskrepans dem emellan.
 
+Vi la även till security scanning (npm audit) för varje GitHub push för att fånga upp eventuella säkerhets problem så tidigt som möjligt i utvecklings-cykeln.
+
+Vi bygger Docker Images i GitHub Actions som vi lagrar i GitHubs Package Registry för varje merge (push) till development och main. Vi valde att använda GitHubs Package Registry, då det är lättare att hålla reda på vilken Docker Image som hör till vilken commit, och det dessutom är trevligare att ha så mycket som möjligt samlat på ett ställe. Docker Imagen i main kan sedan användas för att deploya projektet (om man skulle vilja deploya projektet på någon annan site än Vercel).
+
 ### AI genererat
 Jest-testerna är genererade av Chat GPT och Co-pilot. Vi kopierade sidan vi ville testa och la in den i Chat GPT och bad den att generera Jest tester. Co-pilot bistod med auto-complete.
 
