@@ -82,7 +82,7 @@ Genom att köra för både desktop och mobile så kan vi också se om det är n�
 
 Vi la även till security scanning (npm audit) för varje GitHub push för att fånga upp eventuella säkerhets problem så tidigt som möjligt i utvecklings-cykeln.
 
-Vi bygger Docker Images i GitHub Actions som vi lagrar i GitHubs Package Registry för varje merge (push) till development och main. Vi valde att använda GitHubs Package Registry, då det är lättare att hålla reda på vilken Docker Image som hör till vilken commit, och det dessutom är trevligare att ha så mycket som möjligt samlat på ett ställe. Docker Imagen i main kan sedan användas för att deploya projektet (om man skulle vilja deploya projektet på någon annan site än Vercel).
+Vi bygger Docker Images i GitHub Actions som vi lagrar i GitHubs Package Registry för varje merge (push) till development och main. Vi valde att använda GitHubs Package Registry, då det är lättare att hålla reda på vilken Docker Image som hör till vilken commit, och det dessutom är trevligare att ha så mycket som möjligt samlat på ett ställe. Docker Imagen för main branchen kan sedan användas för att deploya projektet (om man skulle vilja deploya projektet på någon annan site än Vercel). Och Docker Images i development kan användas i test/utveckling syfte om man t.ex. vill se hur något fungerade för en äldre commit eller om man bara vill se hur 'produktions bygget' ser ut just nu på development branchen.
 
 ### AI genererat
 Jest-testerna är genererade av Chat GPT och Co-pilot. Vi kopierade sidan vi ville testa och la in den i Chat GPT och bad den att generera Jest tester. Co-pilot bistod med auto-complete.
