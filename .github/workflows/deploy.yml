@@ -83,5 +83,5 @@ jobs:
         with:
           deployment_id: ${{ steps.create_deployment.outputs.deployment_id }}
           state: success
-          environment_url: https://cloud-examinerande-uppgift-2-grupp-main.onrender.com/
-          log_url: https://dashboard.render.com/web/srv-d48rm763jp1c73coa8d0/deploys
+          environment_url: https://cloud-examinerande-uppgift-2-grupp.onrender.com/
+          log_url: https://dashboard.render.com/web/srv-d48sm7ali9vc739glj3g/deploys
