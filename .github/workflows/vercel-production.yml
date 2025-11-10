@@ -21,9 +21,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-
-      # 3. Capture Vercel Preview URL
-      - name: Deploy to Vercel Preview
+      
+      # 3. Deploy to Vercel Production
+      - name: Deploy to Vercel Production
         id: vercel
         uses: amondnet/vercel-action@v20
         with:
@@ -31,10 +31,21 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           working-directory: ./
+          prod: true
           github-comment: true
+
+      # 4. Create GitHub deployment (production)
+      - name: Create GitHub deployment (production)
+        uses: chrnorm/deployment-action@v2
+        id: deployment
+        with:
+          token: ${{ github.token }}
+          environment-url: ${{ steps.vercel.outputs.url }}
+          environment: production
 
       # 5. Update GitHub deployment status for Vercel
       - name: Update GitHub deployment (Vercel)
+        if: success()
         uses: chrnorm/deployment-status@v2
         with:
           token: ${{ github.token }}
