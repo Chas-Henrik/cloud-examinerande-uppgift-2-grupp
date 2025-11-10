@@ -1,9 +1,9 @@
 # .github/workflows/vercel-preview.yml
 
-name: Vercel Preview Deploy
+name: Vercel-Preview Deploy
 
 on:
-  push:   # triggers Vercel Preview Deploy on push to development branch
+  push:   # triggers Vercel-Preview Deploy on push to development branch
     branches:
       - development
 jobs:
@@ -35,14 +35,14 @@ jobs:
           working-directory: ./
           github-comment: true
 
-      # 4. Create GitHub deployment (preview)
-      - name: Create GitHub deployment (preview)
+      # 4. Create GitHub deployment (vercel-preview)
+      - name: Create GitHub deployment (vercel-preview)
         uses: chrnorm/deployment-action@v2
         id: deployment
         with:
           token: ${{ github.token }}
           environment-url: ${{ steps.vercel.outputs.preview-url }}
-          environment: preview
+          environment: vercel-preview
 
       # 5. Update GitHub deployment status for Vercel
       - name: Update GitHub deployment (Vercel)
