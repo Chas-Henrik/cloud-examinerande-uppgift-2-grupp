@@ -77,7 +77,7 @@ jobs:
         env:
           RENDER_PRODUCTION_DEPLOY_HOOK_URL: ${{ secrets.RENDER_PRODUCTION_DEPLOY_HOOK_URL }}
 
-      # 7️⃣ Update the GitHub Deployment with the Render URL
+      # 7️⃣ Update GitHub Deployment with Render URL
       - name: Update Deployment Status (production)
         uses: peter-evans/create-deployment-status@v4
         with:
