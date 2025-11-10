@@ -50,5 +50,5 @@ jobs:
           token: ${{ github.token }}
           environment-url: ${{ steps.vercel.outputs.preview-url }}
           state: success
-          environment: preview
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
           description: "Deployed to Vercel"

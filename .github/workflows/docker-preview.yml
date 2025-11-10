@@ -100,3 +100,4 @@ jobs:
           environment-url: https://cloud-examinerande-uppgift-2-grupp-gdm8.onrender.com/
           state: 'success'
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          description: "Deployed to Render"
