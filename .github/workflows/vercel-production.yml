@@ -1,9 +1,9 @@
 # .github/workflows/vercel-production.yml
 
-name: Vercel Production Deploy
+name: Vercel-Production Deploy
 
 on:
-  push:   # triggers Vercel Production Deploy on push to main branch
+  push:   # triggers Vercel-Production Deploy on push to main branch
     branches:
       - main
 jobs:
@@ -36,14 +36,14 @@ jobs:
           vercel-args: '--prod'
           github-comment: true
 
-      # 4. Create GitHub deployment (production)
-      - name: Create GitHub deployment (production)
+      # 4. Create GitHub deployment (vercel-production)
+      - name: Create GitHub deployment (vercel-production)
         uses: chrnorm/deployment-action@v2
         id: deployment
         with:
           token: ${{ github.token }}
           environment-url: ${{ steps.vercel.outputs.preview-url }}
-          environment: production
+          environment: vercel-production
 
       # 5. Update GitHub deployment status for Vercel
       - name: Update GitHub deployment (Vercel)
