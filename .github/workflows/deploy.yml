@@ -76,3 +76,12 @@ jobs:
           curl -X POST "$RENDER_PRODUCTION_DEPLOY_HOOK_URL"
         env:
           RENDER_PRODUCTION_DEPLOY_HOOK_URL: ${{ secrets.RENDER_PRODUCTION_DEPLOY_HOOK_URL }}
+
+      # 7️⃣ Update the GitHub Deployment with the Render URL
+      - name: Update Deployment Status (production)
+        uses: peter-evans/create-deployment-status@v4
+        with:
+          deployment_id: ${{ steps.create_deployment.outputs.deployment_id }}
+          state: success
+          environment_url: https://cloud-examinerande-uppgift-2-grupp-main.onrender.com/
+          log_url: https://dashboard.render.com/web/srv-d48rm763jp1c73coa8d0/deploys
