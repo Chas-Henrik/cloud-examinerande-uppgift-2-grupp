@@ -4,6 +4,8 @@ name: Vercel-Production Deploy
 
 on:
   push:   # triggers Vercel-Production Deploy on push to main branch
+    branches:
+      - main
 jobs:
   vercelproductiondeploy:
     runs-on: ubuntu-latest
