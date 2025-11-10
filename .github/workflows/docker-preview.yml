@@ -1,16 +1,21 @@
-name: Docker Image Deploy
+# .github/workflows/docker-preview.yml
+
+name: Docker Image Render-Preview Deploy
 
 on:
-  push:     # trigger Deploy CI on push to main branch
+  push:     # trigger Docker Render-Preview Deploy on push to development branch
     branches:
-      - main
+      - development
   workflow_dispatch:  # allows manual triggering
 
 jobs:
-  deployci:
+  dockerrenderpreviewdeploy:
     runs-on: ubuntu-latest
     environment:
-      name: production
+      name: render-preview
+    # IMPORTANT: the workflow must have write access to deployments, otherwise the action will fail.
+    permissions:
+      deployments: write
     steps:
       # 1️⃣ Clone the repo into the GitHub Actions runner
       - name: Clone repository
@@ -70,9 +75,29 @@ jobs:
           echo "Pulling image: $IMAGE_NAME"
           docker pull $IMAGE_NAME
 
-      # 6️⃣ Trigger Render deploy (production)
-      - name: Trigger Render deploy (production)
+      # 6️⃣ Create GitHub deployment (render-preview)
+      - name: Create GitHub deployment (render-preview)
+        uses: chrnorm/deployment-action@v2
+        id: deployment
+        with:
+          token: ${{ github.token }}
+          environment-url: https://cloud-examinerande-uppgift-2-grupp-gdm8.onrender.com/
+          environment: render-preview
+
+      # 7️⃣ Trigger Render deploy (render-preview)
+      - name: Trigger Render deploy (render-preview)
         run: |
-          curl -X POST "$RENDER_PRODUCTION_DEPLOY_HOOK_URL"
+          curl -X POST "$RENDER_PREVIEW_DEPLOY_HOOK_URL"
         env:
-          RENDER_PRODUCTION_DEPLOY_HOOK_URL: ${{ secrets.RENDER_PRODUCTION_DEPLOY_HOOK_URL }}
+          RENDER_PREVIEW_DEPLOY_HOOK_URL: ${{ secrets.RENDER_PREVIEW_DEPLOY_HOOK_URL }}
+
+      # 8️⃣ Update deployment status (render-preview)
+      - name: Update deployment status (render-preview)
+        if: success()
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: ${{ github.token }}
+          environment-url: https://cloud-examinerande-uppgift-2-grupp-gdm8.onrender.com/
+          state: 'success'
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          description: "Deployed to Render"
