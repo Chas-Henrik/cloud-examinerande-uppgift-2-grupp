@@ -40,7 +40,7 @@ jobs:
         id: deployment
         with:
           token: ${{ github.token }}
-          environment-url: ${{ steps.vercel.outputs.url }}
+          environment-url: ${{ steps.vercel.outputs.preview-url }}
           environment: production
 
       # 5. Update GitHub deployment status for Vercel
@@ -49,7 +49,7 @@ jobs:
         uses: chrnorm/deployment-status@v2
         with:
           token: ${{ github.token }}
-          environment-url: ${{ steps.vercel.outputs.url }}
+          environment-url: ${{ steps.vercel.outputs.preview-url }}
           state: success
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
           description: "Deployed to Vercel"
