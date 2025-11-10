@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: production
+    # IMPORTANT: the workflow must have write access to deployments, otherwise the action will fail.
+    permissions:
+      deployments: write
     steps:
       # 1️⃣ Clone the repo into the GitHub Actions runner
       - name: Clone repository
