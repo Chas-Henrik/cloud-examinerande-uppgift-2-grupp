@@ -1,19 +1,22 @@
+// lib/supabase.ts
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+export function getSupabase() {
+  const url = process.env.SUPABASE_URL
+  const key = process.env.SUPABASE_ANON_KEY
+  if (!url || !key) throw new Error('Supabase environment variables not set')
+  return createClient(url, key)
+}
 
 export function createAuthClient(sb_access_token: string) {
-    return createClient(
-        supabaseUrl,
-        supabaseAnonKey,
-        {
-            global: {
-                headers: { Authorization: `Bearer ${sb_access_token}` },
-            },
-        }
-    );
+  const url = process.env.SUPABASE_URL
+  const key = process.env.SUPABASE_ANON_KEY
+  if (!url || !key) throw new Error('Supabase environment variables not set')
+  return createClient(url, key, {
+    global: {
+      headers: { Authorization: `Bearer ${sb_access_token}` },
+    },
+  })
 }
+
 

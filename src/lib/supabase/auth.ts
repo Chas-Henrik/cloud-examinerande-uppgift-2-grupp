@@ -1,10 +1,11 @@
-import { supabase, createAuthClient } from './client'
+import { getSupabase , createAuthClient } from './client'
 import { LoginCredentials, SignupCredentials } from '@/types/auth.types'
 
 /**
  * Sign up a new user with email and password
  */
 export async function signUp({ email, password }: SignupCredentials) {
+  const supabase = getSupabase()
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -26,6 +27,7 @@ export async function signUp({ email, password }: SignupCredentials) {
  * Sign in an existing user with email and password
  */
 export async function signIn({ email, password }: LoginCredentials) {
+  const supabase = getSupabase()
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
@@ -42,6 +44,7 @@ export async function signIn({ email, password }: LoginCredentials) {
  * Sign out the current user
  */
 export async function signOut() {
+  const supabase = getSupabase()
   const { error } = await supabase.auth.signOut()
 
   if (error) {

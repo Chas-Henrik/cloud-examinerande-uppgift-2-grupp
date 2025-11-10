@@ -8,8 +8,7 @@ Fixes #(issue number)
 - [x] Documentation update
 
 ## ✅ Checklist
-- [ ] I have performed a self-review of my code
-- [ ] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have performed a self-review of my document
 - [ ] Any dependent changes have been merged and published
 
 ## 💡 Additional context
