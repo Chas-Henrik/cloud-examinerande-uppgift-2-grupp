@@ -1,13 +1,15 @@
-name: Docker Image Preview
+# .github/workflows/docker-preview.yml
+
+name: Docker Image Preview Deploy
 
 on:
-  push:     # trigger Docker CI on push to development branch
+  push:     # trigger Docker Production Deploy CI on push to development branch
     branches:
       - development
   workflow_dispatch:  # allows manual triggering
 
 jobs:
-  dockerci:
+  dockerpreviewdeployci:
     runs-on: ubuntu-latest
     environment:
       name: preview
