@@ -79,8 +79,9 @@ jobs:
 
       # 7️⃣ Update GitHub Deployment with Render URL
       - name: Update Deployment Status (preview)
-        uses: peter-evans/create-deployment-status@v4
+        uses: chrnorm/deployment-status@v2
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           deployment_id: ${{ steps.create_deployment.outputs.deployment_id }}
           state: success
           environment_url: https://cloud-examinerande-uppgift-2-grupp-gdm8.onrender.com/
