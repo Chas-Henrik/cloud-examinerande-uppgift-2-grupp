@@ -3,11 +3,14 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
+import ImageContainerList from "@/components/ImageContainerList";
 
 export default function NewEntryPage() {
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [images, setImages] = useState<string[] | null>(null);
+  const [files, setFiles] = useState<File[] | null>(null);  
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -23,6 +26,24 @@ export default function NewEntryPage() {
     checkAuth();
   }, [router]);
 
+  const handleAddImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setFiles(prev => prev ? [...prev, file] : [file]);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64 = reader.result as string;
+      setImages(prev => prev ? [...prev, base64] : [base64]);
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  const handleRemoveImage = (index: number) => {
+    setImages(prev => prev ? prev.filter((_, i) => i !== index) : prev);
+    setFiles(prev => prev ? prev.filter((_, i) => i !== index) : prev);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -30,6 +51,10 @@ export default function NewEntryPage() {
     if (!title.trim() || !content.trim()) {
       setError("Title and content are required");
       return;
+    }
+
+    if (files && files.length > 0) {
+    
     }
 
     setLoading(true);
@@ -131,6 +156,26 @@ export default function NewEntryPage() {
               disabled={loading}
             />
           </div>
+          {images && (
+            <ImageContainerList images={images} onImageDelete={(index) => handleRemoveImage(index)} />
+          )}
+            <>
+              <label
+                htmlFor="image-upload"
+                className="btn-primary mb-4 inline-block"
+              >
+                Add image
+              </label>
+              <input
+                id="image-upload"
+                type="file"
+                accept="image/*"
+                onChange={handleAddImage}
+                // ref={fileInputRef}
+                className="hidden"
+              />
+            </>
+
 
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-sm text-sm">
