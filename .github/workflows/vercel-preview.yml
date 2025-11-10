@@ -3,7 +3,7 @@
 name: Vercel Preview Deploy
 
 on:
-  push:   # triggers Vercel Preview Deploy CI on push
+  push:   # triggers Vercel Preview Deploy on push to development branch
     branches:
       - development
 jobs:

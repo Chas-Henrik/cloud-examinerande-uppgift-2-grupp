@@ -3,13 +3,13 @@
 name: Docker Image Production Deploy
 
 on:
-  push:     # trigger Docker Production Deploy CI on push to main branch
+  push:     # trigger Docker Production Deploy on push to main branch
     branches:
       - main
   workflow_dispatch:  # allows manual triggering
 
 jobs:
-  dockerproductiondeployci:
+  dockerproductiondeploy:
     runs-on: ubuntu-latest
     environment:
       name: production

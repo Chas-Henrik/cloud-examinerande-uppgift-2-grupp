@@ -3,7 +3,7 @@
 name: Vercel Production Deploy
 
 on:
-  push:   # triggers Vercel Production Deploy CI on push
+  push:   # triggers Vercel Production Deploy on push to main branch
     branches:
       - main
 jobs:
