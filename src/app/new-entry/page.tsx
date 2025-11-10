@@ -73,6 +73,23 @@ export default function NewEntryPage() {
         throw new Error(errorData.message || "Failed to create entry");
       }
 
+      const entryData = await res.json();
+      const entryId = entryData.data.id;
+
+      const fileUploadRes = await Promise.all(
+        (files || []).map((file) => {
+          const formData = new FormData();
+          formData.append("image", file);
+          return fetch(`/api/entries/${entryId}/images`, {
+            method: "POST",
+            body: formData.get("image") as Blob,
+          });
+      }));
+
+      if (fileUploadRes.some(res => !res.ok)) {
+        alert("Failed to upload one or more images");
+      } 
+
       router.push("/dashboard");
     } catch (err: unknown) {
       let message = "Failed to create entry";

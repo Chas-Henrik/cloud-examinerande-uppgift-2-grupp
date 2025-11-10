@@ -4,6 +4,7 @@ export interface Entry {
   title: string
   content: string
   created_at: string
+  user_images?: any[]
 }
 
 export interface NewEntry {
