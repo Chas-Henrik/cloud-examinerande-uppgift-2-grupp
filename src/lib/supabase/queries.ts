@@ -103,3 +103,56 @@ export async function deleteEntry(sb_access_token: string, id : string) : Promis
 
   return data
 }
+
+export async function saveImageFile(sb_access_token: string, { image }: { image: Blob }) {
+  const supabase = createAuthClient(sb_access_token);
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    throw new Error('User not authenticated')
+  }
+
+  const fileExtension = image.type.split('/')[1];
+  const fileName = `${Math.random()}.${fileExtension}`
+  const filePath = `private/${user.id}/${fileName}`;
+  
+  const { data, error } = await supabase
+    .storage
+    .from('user-images')
+    .upload(filePath, image, {
+      cacheControl: '3600',
+      upsert: false,
+      contentType: image.type,
+    });
+
+  if (error) {
+    throw error
+  }
+
+  return data;
+}
+
+export async function saveImageMetadata(sb_access_token: string, { entryId, pathName }: { entryId: string, pathName: string }) {
+  const supabase = createAuthClient(sb_access_token);
+  const { data: { user } } = await supabase.auth.getUser()  
+  
+  if (!user) {
+    throw new Error('User not authenticated')
+  }
+
+  const { data, error } = await supabase
+    .from('user_images')
+    .insert([
+      {
+        user_id: user.id,
+        entry_id: entryId,
+        path_name: pathName,
+      }
+    ])
+
+  if (error) {
+    throw error 
+  }
+
+  return data;
+}
