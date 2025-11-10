@@ -1,18 +1,18 @@
 # .github/workflows/docker-production.yml
 
-name: Docker Image Production Deploy
+name: Docker Image Render-Production Deploy
 
 on:
-  push:     # trigger Docker Production Deploy on push to main branch
+  push:     # trigger Docker Render-Production Deploy on push to main branch
     branches:
       - main
   workflow_dispatch:  # allows manual triggering
 
 jobs:
-  dockerproductiondeploy:
+  dockerrenderproductiondeploy:
     runs-on: ubuntu-latest
     environment:
-      name: production
+      name: render-production
     # IMPORTANT: the workflow must have write access to deployments, otherwise the action will fail.
     permissions:
       deployments: write
@@ -75,24 +75,24 @@ jobs:
           echo "Pulling image: $IMAGE_NAME"
           docker pull $IMAGE_NAME
 
-      # 6️⃣ Create GitHub deployment (production)
-      - name: Create GitHub deployment (production)
+      # 6️⃣ Create GitHub deployment (render-production)
+      - name: Create GitHub deployment (render-production)
         uses: chrnorm/deployment-action@v2
         id: deployment
         with:
           token: ${{ github.token }}
           environment-url: https://cloud-examinerande-uppgift-2-grupp.onrender.com/
-          environment: production
+          environment: render-production
 
-      # 7️⃣ Trigger Render deploy (production)
-      - name: Trigger Render deploy (production)
+      # 7️⃣ Trigger Render deploy (render-production)
+      - name: Trigger Render deploy (render-production)
         run: |
           curl -X POST "$RENDER_PRODUCTION_DEPLOY_HOOK_URL"
         env:
           RENDER_PRODUCTION_DEPLOY_HOOK_URL: ${{ secrets.RENDER_PRODUCTION_DEPLOY_HOOK_URL }}
 
-      # 8️⃣ Update deployment status (production)
-      - name: Update deployment status (production)
+      # 8️⃣ Update deployment status (render-production)
+      - name: Update deployment status (render-production)
         if: success()
         uses: chrnorm/deployment-status@v2
         with:

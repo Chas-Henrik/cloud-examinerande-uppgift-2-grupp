@@ -1,18 +1,18 @@
 # .github/workflows/docker-preview.yml
 
-name: Docker Image Preview Deploy
+name: Docker Image Render-Preview Deploy
 
 on:
-  push:     # trigger Docker Preview Deploy on push to development branch
+  push:     # trigger Docker Render-Preview Deploy on push to development branch
     branches:
       - development
   workflow_dispatch:  # allows manual triggering
 
 jobs:
-  dockerpreviewdeploy:
+  dockerrenderpreviewdeploy:
     runs-on: ubuntu-latest
     environment:
-      name: preview
+      name: render-preview
     # IMPORTANT: the workflow must have write access to deployments, otherwise the action will fail.
     permissions:
       deployments: write
@@ -75,24 +75,24 @@ jobs:
           echo "Pulling image: $IMAGE_NAME"
           docker pull $IMAGE_NAME
 
-      # 6️⃣ Create GitHub deployment (preview)
-      - name: Create GitHub deployment (preview)
+      # 6️⃣ Create GitHub deployment (render-preview)
+      - name: Create GitHub deployment (render-preview)
         uses: chrnorm/deployment-action@v2
         id: deployment
         with:
           token: ${{ github.token }}
           environment-url: https://cloud-examinerande-uppgift-2-grupp-gdm8.onrender.com/
-          environment: preview
+          environment: render-preview
 
-      # 7️⃣ Trigger Render deploy (preview)
-      - name: Trigger Render deploy (preview)
+      # 7️⃣ Trigger Render deploy (render-preview)
+      - name: Trigger Render deploy (render-preview)
         run: |
           curl -X POST "$RENDER_PREVIEW_DEPLOY_HOOK_URL"
         env:
           RENDER_PREVIEW_DEPLOY_HOOK_URL: ${{ secrets.RENDER_PREVIEW_DEPLOY_HOOK_URL }}
 
-      # 8️⃣ Update deployment status (preview)
-      - name: Update deployment status (preview)
+      # 8️⃣ Update deployment status (render-preview)
+      - name: Update deployment status (render-preview)
         if: success()
         uses: chrnorm/deployment-status@v2
         with:
