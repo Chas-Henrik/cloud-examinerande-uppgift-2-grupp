@@ -31,7 +31,7 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           working-directory: ./
-          prod: true
+          vercel-args: '--prod'
           github-comment: true
 
       # 4. Create GitHub deployment (production)
