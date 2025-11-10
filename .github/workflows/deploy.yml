@@ -75,7 +75,7 @@ jobs:
         uses: chrnorm/deployment-action@v2
         id: deployment
         with:
-          token: '${{ secrets.GITHUB_TOKEN }}'
+          token: '${{ github.token }}'
           environment-url: https://cloud-examinerande-uppgift-2-grupp.onrender.com/
           environment: production
 
@@ -91,7 +91,7 @@ jobs:
         if: success()
         uses: chrnorm/deployment-status@v2
         with:
-          token: '${{ secrets.GITHUB_TOKEN }}'
+          token: '${{ github.token }}'
           environment-url: https://cloud-examinerande-uppgift-2-grupp.onrender.com/
           state: 'success'
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
