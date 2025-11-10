@@ -70,20 +70,28 @@ jobs:
           echo "Pulling image: $IMAGE_NAME"
           docker pull $IMAGE_NAME
 
-      # 6️⃣ Trigger Render deploy (preview)
+      # 6️⃣ Create GitHub deployment (preview)
+      - name: Create GitHub deployment (preview)
+        uses: chrnorm/deployment-action@v2
+        id: deployment
+        with:
+          token: '${{ secrets.GITHUB_TOKEN }}'
+          environment-url: https://cloud-examinerande-uppgift-2-grupp-gdm8.onrender.com/
+          environment: preview
+
+      # 7️⃣ Trigger Render deploy (preview)
       - name: Trigger Render deploy (preview)
         run: |
           curl -X POST "$RENDER_PREVIEW_DEPLOY_HOOK_URL"
         env:
           RENDER_PREVIEW_DEPLOY_HOOK_URL: ${{ secrets.RENDER_PREVIEW_DEPLOY_HOOK_URL }}
 
-      # 7️⃣ Update GitHub Deployment with Render URL (preview)
-      - name: Update Deployment Status (preview)
+      # 8️⃣ Update deployment status (preview)
+      - name: Update deployment status (preview)
+        if: success()
         uses: chrnorm/deployment-status@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          state: success
-          environment: preview
+          token: '${{ secrets.GITHUB_TOKEN }}'
           environment-url: https://cloud-examinerande-uppgift-2-grupp-gdm8.onrender.com/
-          log-url: https://dashboard.render.com/web/srv-d48sn2je5dus73cdctg0/deploys
-          auto-inactive: true
+          state: 'success'
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
