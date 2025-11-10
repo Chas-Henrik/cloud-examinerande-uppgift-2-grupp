@@ -10,7 +10,7 @@ jobs:
   dockerci:
     runs-on: ubuntu-latest
     environment:
-      name: Preview
+      name: preview
     steps:
       # 1️⃣ Clone the repo into the GitHub Actions runner
       - name: Clone repository
@@ -69,3 +69,10 @@ jobs:
           IMAGE_NAME=ghcr.io/$OWNER_LC/$REPO_NAME:$COMMIT_SHA
           echo "Pulling image: $IMAGE_NAME"
           docker pull $IMAGE_NAME
+
+      # 6️⃣ Trigger Render deploy (preview)
+      - name: Trigger Render deploy (preview)
+        run: |
+          curl -X POST "$RENDER_PREVIEW_DEPLOY_HOOK_URL"
+        env:
+          RENDER_PREVIEW_DEPLOY_HOOK_URL: ${{ secrets.RENDER_PREVIEW_DEPLOY_HOOK_URL }}

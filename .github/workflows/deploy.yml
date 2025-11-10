@@ -10,7 +10,7 @@ jobs:
   deployci:
     runs-on: ubuntu-latest
     environment:
-      name: Production
+      name: production
     steps:
       # 1️⃣ Clone the repo into the GitHub Actions runner
       - name: Clone repository
@@ -69,3 +69,10 @@ jobs:
           IMAGE_NAME=ghcr.io/$OWNER_LC/$REPO_NAME:$COMMIT_SHA
           echo "Pulling image: $IMAGE_NAME"
           docker pull $IMAGE_NAME
+
+      # 6️⃣ Trigger Render deploy (production)
+      - name: Trigger Render deploy (production)
+        run: |
+          curl -X POST "$RENDER_PRODUCTION_DEPLOY_HOOK_URL"
+        env:
+          RENDER_PRODUCTION_DEPLOY_HOOK_URL: ${{ secrets.RENDER_PRODUCTION_DEPLOY_HOOK_URL }}
