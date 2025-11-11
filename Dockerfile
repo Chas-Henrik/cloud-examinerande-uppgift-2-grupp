@@ -17,9 +17,6 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Expose port
-EXPOSE 3000
-
 # ***Runtime Stage***
 FROM node:22-alpine AS runtime
 WORKDIR /app
