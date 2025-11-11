@@ -1,4 +1,4 @@
-import Image from "next/image";
+
 
 interface ImageContainerProps {
   image : string;
@@ -10,7 +10,7 @@ export default function ImageContainer({ image, onDelete, isEdit }: ImageContain
 
   return (
     <div className="relative w-40 h-fit rounded-[10px] border bg-gray-50 border-gray-300 flex items-center justify-center overflow-hidden">
-      <Image src={image} alt="" className="w-full h-full object-contain" />
+      <img src={image} alt="" className="w-full h-full object-contain" />
       {isEdit && 
         <button
           type="button"

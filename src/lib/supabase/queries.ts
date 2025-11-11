@@ -179,7 +179,7 @@ export async function getImages(sb_access_token: string, entries: Entry[]) {
           // Convert binary data to base64 for JSON transport
           const arrayBuffer = await data.arrayBuffer();
           const base64String = Buffer.from(arrayBuffer).toString("base64");
-          console.log(img.path_name)
+
           return {
             ...img,
             file_data: `data:image/${img.path_name.split("/")[2].split(".")[2]};base64,${base64String}`,
