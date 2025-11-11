@@ -5,33 +5,37 @@ FROM node:22-alpine AS builder
 
 WORKDIR /app
 
-# Copy package files
+# Kopiera package files
 COPY package*.json ./
 
 # Install all dependencies (including devDependencies)
 RUN npm ci
 
-# Copy all code
+# Kopiera all kod
 COPY . .
 
-# Set environment variables (NODE_ENV is used in application code)
-ENV NODE_ENV=production
-ENV PORT=3000
-
-# Build the application
+# Bygg applikationen
 RUN npm run build
+
+# Exponera port
+EXPOSE 3000
 
 # ***Runtime Stage***
 FROM node:22-alpine AS runtime
-WORKDIR /app
 
-# Copy standalone build and required static files
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./static
+WORKDIR /app
+ENV NODE_ENV=production
+
+# Only copy the needed files from builder stage
+COPY --from=builder /app/package*.json ./
+
+# Install only production dependencies
+RUN npm ci --omit=dev
+
+COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 
-# Expose the port
 EXPOSE 3000
 
-# Run the server
-CMD ["node", "server.js"]
+# Start the application
+CMD ["npm", "start"]
