@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { updateEntry, deleteEntry } from "@/lib/supabase/queries";
+import { updateEntry, deleteEntry, deleteImageFiles } from "@/lib/supabase/queries";
 
 export async function PATCH(req: NextRequest, context: { params: Promise<{ id: string }>}) {
 
@@ -40,7 +40,9 @@ export async function DELETE(req: NextRequest, context: { params: Promise<{ id: 
 
     const { id } = await context.params;
 
-    await deleteEntry(sb_access_token, id);
+    const deletedData = await deleteEntry(sb_access_token, id);
+
+    await deleteImageFiles(sb_access_token, deletedData)
 
     return NextResponse.json({ ok: true, message: "Entry deleted successfully" });
   } catch (err: unknown) {

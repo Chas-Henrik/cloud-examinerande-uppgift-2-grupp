@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import ImageContainerList from "@/components/ImageContainerList";
@@ -13,6 +13,8 @@ export default function NewEntryPage() {
   const [files, setFiles] = useState<File[] | null>(null);  
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
     async function checkAuth() {
@@ -27,6 +29,7 @@ export default function NewEntryPage() {
   }, [router]);
 
   const handleAddImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("Inside handle add image")
     const file = e.target.files?.[0];
     if (!file) return;
     setFiles(prev => prev ? [...prev, file] : [file]);
@@ -35,7 +38,7 @@ export default function NewEntryPage() {
       const base64 = reader.result as string;
       setImages(prev => prev ? [...prev, base64] : [base64]);
     };
-
+    if (fileInputRef.current) fileInputRef.current.value = "";
     reader.readAsDataURL(file);
   };
 
@@ -188,7 +191,7 @@ export default function NewEntryPage() {
                 type="file"
                 accept="image/*"
                 onChange={handleAddImage}
-                // ref={fileInputRef}
+                ref={fileInputRef}
                 className="hidden"
               />
             </>

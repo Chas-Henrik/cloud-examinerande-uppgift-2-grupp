@@ -83,12 +83,22 @@ export async function updateEntry(sb_access_token: string, id : string, entry: U
   return data
 }
 
-export async function deleteEntry(sb_access_token: string, id : string) : Promise<Entry> {
+export async function deleteEntry(sb_access_token: string, id : string) : Promise<UserImage[]> {
   const supabase = createAuthClient(sb_access_token);
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
     throw new Error('User not authenticated')
+  }
+
+  const { data : fetchData, error: fetchError } = await supabase
+    .from('entries')
+    .select('*, user_images(*)')
+    .eq('id', id!)
+    .single()
+
+  if (fetchError) {
+    throw fetchError
   }
 
   const { data, error } = await supabase
@@ -102,7 +112,7 @@ export async function deleteEntry(sb_access_token: string, id : string) : Promis
     throw error
   }
 
-  return data
+  return fetchData.user_images
 }
 
 export async function saveImageFile(sb_access_token: string, { image }: { image: Blob }) {
@@ -131,6 +141,28 @@ export async function saveImageFile(sb_access_token: string, { image }: { image:
   }
 
   return data;
+}
+
+export async function deleteImageFiles(sb_access_token: string, imagesData: UserImage[]) {
+  const supabase = createAuthClient(sb_access_token);
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    throw new Error('User not authenticated')
+  } 
+
+  if (imagesData.length < 1) return
+
+  const { data, error } = await supabase
+    .storage
+    .from("user-images")
+    .remove(imagesData.map(img => img.path_name))
+
+  if (error) {
+    throw error
+  }
+
+  return data
 }
 
 export async function saveImageMetadata(sb_access_token: string, { entryId, pathName }: { entryId: string, pathName: string }) {
