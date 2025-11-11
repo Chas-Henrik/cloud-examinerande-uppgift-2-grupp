@@ -66,16 +66,3 @@ CREATE POLICY "Users can insert their own user_images"
     ON public.user_images
     FOR INSERT
     WITH CHECK (auth.uid() = user_id);
-
--- Create policy: Users can update their own user_images
-CREATE POLICY "Users can update their own user_images"
-    ON public.user_images
-    FOR UPDATE
-    USING (auth.uid() = user_id)
-    WITH CHECK (auth.uid() = user_id);
-
--- Create policy: Users can delete their own user_images
-CREATE POLICY "Users can delete their own user_images"
-    ON public.user_images
-    FOR DELETE
-    USING (auth.uid() = user_id);
