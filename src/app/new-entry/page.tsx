@@ -174,7 +174,7 @@ export default function NewEntryPage() {
             />
           </div>
           {images && (
-            <ImageContainerList images={images} onImageDelete={(index) => handleRemoveImage(index)} />
+            <ImageContainerList images={images} onImageDelete={(index) => handleRemoveImage(index)} isEdit={true}/>
           )}
             <>
               <label

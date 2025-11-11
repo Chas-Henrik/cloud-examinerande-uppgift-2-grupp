@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createEntry, getEntries } from "@/lib/supabase/queries";
+import { createEntry, getEntries, getImages } from "@/lib/supabase/queries";
 
 export async function POST(req: NextRequest) {
 
@@ -39,7 +39,9 @@ export async function GET(req: NextRequest) {
 
     const data = await getEntries(sb_access_token);
 
-    return NextResponse.json({ ok: true, data: data });
+    const filesData = await getImages(sb_access_token, data);
+
+    return NextResponse.json({ ok: true, data: filesData });
 
   } catch (err: unknown) {
     console.error('entries GET error:', err);
