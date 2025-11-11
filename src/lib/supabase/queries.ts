@@ -101,12 +101,10 @@ export async function deleteEntry(sb_access_token: string, id : string) : Promis
     throw fetchError
   }
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('entries')
     .delete()
     .eq('id', id!) 
-    .select()
-    .single()
 
   if (error) {
     throw error
