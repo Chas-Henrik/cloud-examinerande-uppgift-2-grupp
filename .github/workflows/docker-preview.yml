@@ -4,6 +4,8 @@ name: Docker Image Render-Preview Deploy
 
 on:
   push:     # trigger Docker Render-Preview Deploy on push to development branch
+    branches:
+      - development
   workflow_dispatch:  # allows manual triggering
 
 jobs:
