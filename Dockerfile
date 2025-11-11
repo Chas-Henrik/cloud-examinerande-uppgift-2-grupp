@@ -14,6 +14,10 @@ RUN npm ci
 # Copy all code
 COPY . .
 
+# Set environment variables (NODE_ENV is used in application code)
+ENV NODE_ENV=production
+ENV PORT=3000
+
 # Build the application
 RUN npm run build
 
@@ -25,10 +29,6 @@ WORKDIR /app
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./static
 COPY --from=builder /app/public ./public
-
-# Set environment variables
-ENV NODE_ENV=production
-ENV PORT=3000
 
 # Expose the port
 EXPOSE 3000
