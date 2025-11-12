@@ -101,7 +101,7 @@ Jest-testerna är genererade av Chat GPT och Co-pilot. Vi kopierade sidan vi vil
 - Redigering av inlägg
 - Borttagning av inlägg
 - Markdownsupport för inläggen
-- Optimerad Docker Image (1.33GB)
+- Optimerad Docker Image (2.83 GB -> 308 MB)
 - Unit tester med Jest
 
 **Advanced Features**
