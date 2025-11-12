@@ -1,4 +1,5 @@
 import { Entry } from '@/types/database.types'
+import ImageContainerList from './ImageContainerList';
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -46,9 +47,9 @@ export default function EntryCard({ entry, onEdit, onDelete }: EntryCardProps) {
       </div>
       <div
         className="text-dark-brown/80 leading-relaxed whitespace-pre-wrap"
-        style={{ width: "200px" }}
       >
         <Markdown remarkPlugins={[remarkGfm]}>{entry.content}</Markdown>
+        <ImageContainerList images={entry.files || []} isEdit={false} />
       </div>
     </div>
   );

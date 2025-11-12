@@ -1,15 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
+import ImageContainerList from "@/components/ImageContainerList";
 
 export default function NewEntryPage() {
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [images, setImages] = useState<string[] | null>(null);
+  const [files, setFiles] = useState<File[] | null>(null);  
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
     async function checkAuth() {
@@ -23,6 +28,25 @@ export default function NewEntryPage() {
     checkAuth();
   }, [router]);
 
+  const handleAddImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("Inside handle add image")
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setFiles(prev => prev ? [...prev, file] : [file]);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64 = reader.result as string;
+      setImages(prev => prev ? [...prev, base64] : [base64]);
+    };
+    if (fileInputRef.current) fileInputRef.current.value = "";
+    reader.readAsDataURL(file);
+  };
+
+  const handleRemoveImage = (index: number) => {
+    setImages(prev => prev ? prev.filter((_, i) => i !== index) : prev);
+    setFiles(prev => prev ? prev.filter((_, i) => i !== index) : prev);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -30,6 +54,10 @@ export default function NewEntryPage() {
     if (!title.trim() || !content.trim()) {
       setError("Title and content are required");
       return;
+    }
+
+    if (files && files.length > 0) {
+    
     }
 
     setLoading(true);
@@ -47,6 +75,23 @@ export default function NewEntryPage() {
         const errorData = await res.json();
         throw new Error(errorData.message || "Failed to create entry");
       }
+
+      const entryData = await res.json();
+      const entryId = entryData.data.id;
+
+      const fileUploadRes = await Promise.all(
+        (files || []).map((file) => {
+          const formData = new FormData();
+          formData.append("image", file);
+          return fetch(`/api/entries/${entryId}/images`, {
+            method: "POST",
+            body: formData.get("image") as Blob,
+          });
+      }));
+
+      if (fileUploadRes.some(res => !res.ok)) {
+        alert("Failed to upload one or more images");
+      } 
 
       router.push("/dashboard");
     } catch (err: unknown) {
@@ -131,6 +176,26 @@ export default function NewEntryPage() {
               disabled={loading}
             />
           </div>
+          {images && (
+            <ImageContainerList images={images} onImageDelete={(index) => handleRemoveImage(index)} isEdit={true}/>
+          )}
+            <>
+              <label
+                htmlFor="image-upload"
+                className="btn-primary mb-4 inline-block"
+              >
+                Add image
+              </label>
+              <input
+                id="image-upload"
+                type="file"
+                accept="image/*"
+                onChange={handleAddImage}
+                ref={fileInputRef}
+                className="hidden"
+              />
+            </>
+
 
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-sm text-sm">

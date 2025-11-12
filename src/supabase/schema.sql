@@ -38,3 +38,43 @@ CREATE POLICY "Users can delete their own entries"
 -- Create index for better query performance
 CREATE INDEX IF NOT EXISTS entries_user_id_idx ON public.entries(user_id);
 CREATE INDEX IF NOT EXISTS entries_created_at_idx ON public.entries(created_at DESC);
+
+
+-- Create user_images table
+CREATE TABLE IF NOT EXISTS public.user_images (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+    entry_id UUID REFERENCES public.entries(id) ON DELETE CASCADE,
+    path_name text NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Enable Row Level Security
+ALTER TABLE public.user_images ENABLE ROW LEVEL SECURITY;
+
+-- Create index for better query performance
+CREATE INDEX IF NOT EXISTS user_images_entry_id_idx ON public.user_images(entry_id);
+
+-- Create policy: Users can only see their own user_images
+CREATE POLICY "Users can view their own user_images"
+    ON public.user_images
+    FOR SELECT
+    USING (auth.uid() = user_id);
+
+-- Create policy: Users can insert their own user_images
+CREATE POLICY "Users can insert their own user_images"
+    ON public.user_images
+    FOR INSERT
+    WITH CHECK (auth.uid() = user_id);
+
+-- Create policy: Users can update their own user_images
+CREATE POLICY "Users can update their own user_images"
+    ON public.user_images
+    FOR UPDATE
+    USING (auth.uid() = user_id)
+    WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete their own user_images"
+    ON public.user_images
+    FOR DELETE
+    USING (auth.uid() = user_id);
