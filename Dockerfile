@@ -14,10 +14,6 @@ RUN npm ci
 # Copy all code
 COPY . .
 
-# Set environment variables (NODE_ENV is used in application code)
-ENV NODE_ENV=production
-ENV PORT=3000
-
 # Build the application
 RUN npm run build
 
@@ -25,10 +21,13 @@ RUN npm run build
 FROM node:22-alpine AS runtime
 WORKDIR /app
 
+ENV NODE_ENV=production
+ENV HOSTNAME=0.0.0.0
+
 # Copy standalone build and required static files
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./static
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
 
 # Expose the port
 EXPOSE 3000
