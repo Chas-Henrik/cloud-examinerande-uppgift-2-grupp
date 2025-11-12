@@ -6,7 +6,6 @@ on:
   push:     # trigger Docker Render-Production Deploy on push to main branch
     branches:
       - main
-  workflow_dispatch:  # allows manual triggering
 
 jobs:
   dockerrenderproductiondeploy:
