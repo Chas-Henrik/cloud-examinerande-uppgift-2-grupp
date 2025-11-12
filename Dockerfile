@@ -2,7 +2,6 @@
 
 # ***Build Stage***
 FROM node:22-alpine AS builder
-
 WORKDIR /app
 
 # Copy package files
@@ -21,6 +20,7 @@ RUN npm run build
 FROM node:22-alpine AS runtime
 WORKDIR /app
 
+# Set environment variables
 ENV NODE_ENV=production
 ENV HOSTNAME=0.0.0.0
 
